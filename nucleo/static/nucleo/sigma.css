@@ -1102,3 +1102,9 @@ html, body { overflow-x: clip; }
   .barras .relleno, .consumo .barra span { animation: none; }
   h1 .estado { animation: none; }
 }
+
+/* Tema oscuro: al pasar el cursor, el botón principal se aclara poco y el texto blanco sigue legible. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema="claro"]) .boton:not(.secundario):not(.peligro):not(.principal):not(.ok):hover { background: #3b8049; border-color: #7cc58a; }
+}
+:root[data-tema="oscuro"] .boton:not(.secundario):not(.peligro):not(.principal):not(.ok):hover { background: #3b8049; border-color: #7cc58a; }
