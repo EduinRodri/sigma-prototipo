@@ -1,0 +1,1 @@
+{% load static %}{% if es_gestion %}<a class="vehiculo" href="{% url 'vehiculo' camion.placa %}">{% else %}<span class="vehiculo">{% endif %}<img src="{% static camion.foto %}" alt="" width="44" height="30" loading="lazy"><span><b>{{ camion.placa }}</b><small>{{ camion.get_tipo_display }}</small></span>{% if es_gestion %}</a>{% else %}</span>{% endif %}

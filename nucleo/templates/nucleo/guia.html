@@ -1,0 +1,146 @@
+{% extends "nucleo/base.html" %}{% load sigma %}
+{% block titulo %}Guía de diseño{% endblock %}
+{% block contenido %}
+<div class="encabezado">
+  <div>
+    <h1>Guía de diseño de SIGMA</h1>
+    <p class="subtitulo">El kit de interfaz de la aplicación: principios, colores, tipografía, iconos y componentes con sus reglas de uso. Cambia el tema con el botón sol/luna de la cabecera para ver cada valor en claro y oscuro.</p>
+  </div>
+</div>
+
+<nav class="guia-indice" aria-label="Secciones de la guía">
+  <a href="#principios">Principios</a><a href="#color">Color</a><a href="#tipografia">Tipografía</a><a href="#iconos">Iconos</a><a href="#botones">Botones</a><a href="#estados">Estados</a><a href="#componentes">Componentes</a><a href="#movimiento">Espacio y movimiento</a><a href="#accesibilidad">Accesibilidad</a>
+</nav>
+
+<section class="seccion guia" id="principios">
+  <h2>Principios</h2>
+  <div class="guia-rejilla">
+    <div class="panel"><h3>1. Se diseña para quien lo usa</h3><p>Técnico en el taller con el celular, administrativa en la oficina, dirección entre reuniones. Cada pantalla responde a una pregunta de ese rol: «¿cuánto me queda?», «¿qué falta por entregar?», «¿qué apruebo?».</p></div>
+    <div class="panel"><h3>2. Una acción principal por pantalla</h3><p>Hay un solo botón de color pleno (o dorado flotante en celular). Lo demás es secundario. Regla tomada de la guía del botón de IBM Carbon.</p></div>
+    <div class="panel"><h3>3. El color significa algo</h3><p>Verde de la marca = acción y aprobado; dorado = lo destacado y lo pendiente; rojo = error o rechazo. Nunca solo color: siempre texto o icono además.</p></div>
+    <div class="panel"><h3>4. Tokens, no valores sueltos</h3><p>Colores, radios y espacios viven en variables CSS con nombre. Cambiar el tema o la marca es cambiar los tokens (la idea de Atlassian y GitHub Primer).</p></div>
+  </div>
+</section>
+
+<section class="seccion guia" id="color">
+  <h2>Color</h2>
+  <p class="ayuda">Nombres de tokens por su <b>función</b>, no por su valor. Cada muestra usa el token vivo: cambia al activar el tema oscuro.</p>
+  <div class="muestras">
+    {% for nombre, uso in colores %}
+    <div class="muestra"><span class="color" style="background: var({{ nombre }})"></span><div><code>{{ nombre }}</code><small>{{ uso }}</small></div></div>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="seccion guia" id="tipografia">
+  <h2>Tipografía</h2>
+  <div class="panel tipos">
+    <div><small>Outfit 700 · marca, títulos y cifras</small><p class="t-h1">Anticipos de mantenimiento</p></div>
+    <div><small>Outfit 600 · subtítulos de sección</small><p class="t-h2">Últimos gastos registrados</p></div>
+    <div><small>Inter 400 · texto de lectura (14 px en PC, 15 px en celular)</small><p>El saldo de caja se calcula; no se escribe. Cada gasto lleva su soporte y la aprobación de la dirección.</p></div>
+    <div><small>Inter tabular · cifras alineadas</small><p class="t-cifra">$1.500.000 &nbsp; $170.000 &nbsp; $45.000</p></div>
+  </div>
+  <p class="ayuda">Las dos fuentes son variables, se sirven desde la propia aplicación (sin pedir nada a terceros) y funcionan sin conexión.</p>
+</section>
+
+<section class="seccion guia" id="iconos">
+  <h2>Iconos</h2>
+  <p class="ayuda">Una sola familia: cuadrícula de 24 px, trazo de 1,7 px con extremos redondeados, color heredado del texto. Tamaños: 16 px en menús y tablas, 22 px en barra inferior y accesos, 24 px en chips.</p>
+  <div class="iconos-rejilla">
+    {% for i in iconos %}<div class="icono-caja"><svg class="icono"><use href="#{{ i }}"/></svg><code>{{ i|slice:"2:" }}</code></div>{% endfor %}
+  </div>
+</section>
+
+<section class="seccion guia" id="botones">
+  <h2>Botones</h2>
+  <div class="panel">
+    <div class="guia-fila">
+      <button class="boton" type="button">Registrar gasto</button><span><b>Primario.</b> Una sola vez por pantalla. En celular, la acción principal flota en dorado sobre la barra inferior.</span>
+    </div>
+    <div class="guia-fila">
+      <button class="boton secundario" type="button">Cancelar</button><span><b>Secundario.</b> Solo junto a un primario, para la acción contraria (Cancelar, Volver).</span>
+    </div>
+    <div class="guia-fila">
+      <button class="boton peligro" type="button">Anular gasto</button><span><b>Peligro.</b> Acciones que no se deshacen; siempre piden confirmación en un diálogo.</span>
+    </div>
+    <div class="guia-fila">
+      <button class="boton ok" type="button"><svg class="icono"><use href="#i-ok"/></svg>Aprobar</button><span><b>Con icono.</b> El icono refuerza, no reemplaza, la etiqueta. Un botón solo con icono debe llevar <code>aria-label</code> y <code>title</code>.</span>
+    </div>
+    <h3>Reglas de etiqueta</h3>
+    <ul class="reglas">
+      <li>Verbo + sustantivo en minúscula inicial: «Registrar gasto», «Entregar anticipo». Excepciones breves: «Cancelar», «Cerrar», «Aprobar».</li>
+      <li>La etiqueta no se corta: si no cabe, pasa a otra línea.</li>
+      <li>En celular todo botón mide al menos 44 px de alto; en formularios largos el de enviar queda fijo sobre la barra.</li>
+      <li>En diálogos de confirmación la acción destructiva va primero en celular y a la derecha en PC.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="seccion guia" id="estados">
+  <h2>Estados</h2>
+  <div class="panel">
+    <div class="guia-fila"><span class="estado estado-PENDIENTE">Pendiente</span><span>Gasto registrado, a la espera de la dirección. El punto late suavemente.</span></div>
+    <div class="guia-fila"><span class="estado estado-APROBADO">Aprobado</span><span>Gasto reconocido; cuenta en reportes.</span></div>
+    <div class="guia-fila"><span class="estado estado-RECHAZADO">Rechazado</span><span>Devuelto con motivo; el técnico lo ve en Inicio y registra otro.</span></div>
+    <div class="guia-fila"><span class="estado estado-ANULADO">Anulado</span><span>Aprobado y luego anulado con motivo; queda el rastro.</span></div>
+    <div class="guia-fila"><span class="estado estado-ABIERTO">Abierto</span><span>Anticipo con saldo por legalizar.</span></div>
+    <div class="guia-fila"><span class="estado estado-CERRADO">Cerrado</span><span>Anticipo legalizado; ya no admite gastos.</span></div>
+  </div>
+  <h3>Categorías de gasto</h3>
+  <div class="panel guia-fila-wrap">
+    {% for c in categorias %}{% include "nucleo/_categoria.html" with c=c %}{% endfor %}
+  </div>
+</section>
+
+<section class="seccion guia" id="componentes">
+  <h2>Componentes</h2>
+  <h3>Cifra</h3>
+  <div class="cifras">
+    <div class="cifra"><div class="etiqueta"><svg class="icono"><use href="#i-billete"/></svg>Anticipos abiertos</div><div class="valor">2</div></div>
+    <div class="cifra ambar"><div class="etiqueta"><svg class="icono"><use href="#i-aprobar"/></svg>Por aprobar</div><div class="valor">3</div><div class="nota">Ámbar cuando hay algo esperando.</div></div>
+    <div class="cifra roja"><div class="etiqueta"><svg class="icono"><use href="#i-fondo"/></svg>Saldo</div><div class="valor">-$120.000</div><div class="nota">Roja si está en descubierto.</div></div>
+  </div>
+  <h3>Alertas de atención</h3>
+  <div class="alertas">
+    <div class="alerta-fila roja"><svg class="icono"><use href="#i-alerta"/></svg><span>G-12 fue rechazado: la foto no se lee.</span><b>Ver y registrar de nuevo</b></div>
+    <div class="alerta-fila ambar"><svg class="icono"><use href="#i-reloj"/></svg><span>2 gastos llevan más de 3 días esperando aprobación.</span><b>Revisar ahora</b></div>
+  </div>
+  <h3>Aviso (toast) y confirmación</h3>
+  <div class="panel acciones">
+    <button class="boton secundario" type="button" data-guia="aviso">Mostrar aviso</button>
+    <button class="boton peligro" type="button" data-confirmar="Así se ve la confirmación: explica la consecuencia y ofrece volver." data-ok="Entendido" data-guia="confirmar">Mostrar confirmación</button>
+  </div>
+  <h3>Estado vacío</h3>
+  <div class="panel vacio"><svg class="vacia-ilustra"><use href="#i-llave"/></svg><strong>Sin gastos</strong>Qué falta y qué hacer: «Todavía no hay gastos. Registra el primero con la foto de la factura».</div>
+  <h3>Tabla en PC, tarjeta en celular</h3>
+  <div class="tabla"><table><thead><tr><th>Gasto</th><th>Categoría</th><th class="num">Monto</th><th>Estado</th></tr></thead><tbody><tr><td><a class="id" href="#componentes">G-1</a></td><td>{% include "nucleo/_categoria.html" with c="Frenos" %}</td><td class="num">$180.000</td><td><span class="estado estado-APROBADO">Aprobado</span></td></tr></tbody></table></div>
+</section>
+
+<section class="seccion guia" id="movimiento">
+  <h2>Espacio, forma y movimiento</h2>
+  <div class="panel">
+    <table class="guia-tabla"><tbody>
+      <tr><th>Espaciado</th><td>Escala de 4 / 8 px: 4, 8, 12, 16, 24, 32. Lo relacionado va más junto que lo no relacionado.</td></tr>
+      <tr><th>Radios</th><td>6 px en controles, 10 px en paneles y tarjetas, 12 px en el banner y los diálogos, redondo en avatares.</td></tr>
+      <tr><th>Elevación</th><td>Casi plana: sombra mínima en paneles; sombra fuerte solo en lo que flota (toast, menú «Más», botón flotante, diálogo).</td></tr>
+      <tr><th>Movimiento</th><td>Respuesta a un toque: 120–200 ms. Aparición de contenido: 400 ms. Solo <code>transform</code> y <code>opacity</code>. Todo se apaga con «reducir movimiento» del sistema.</td></tr>
+      <tr><th>Blancos táctiles</th><td>Mínimo 44 px en celular (Apple 44 pt, Material 48 dp).</td></tr>
+      <tr><th>Puntos de quiebre</th><td>Hasta 900 px: barra inferior y tarjetas (dos columnas entre 601 y 900 px). Más de 900 px: barra lateral y tablas.</td></tr>
+    </tbody></table>
+  </div>
+</section>
+
+<section class="seccion guia" id="accesibilidad">
+  <h2>Accesibilidad</h2>
+  <div class="panel">
+    <ul class="reglas">
+      <li>Texto con contraste mínimo 4,5:1 en claro y oscuro (medido con axe-core).</li>
+      <li>El estado nunca se comunica solo con color: lleva texto.</li>
+      <li>Enlace «Saltar al contenido», foco dorado visible, menú con <code>aria-current</code>.</li>
+      <li>Los enlaces dentro de un párrafo van subrayados.</li>
+      <li>Iconos decorativos ocultos al lector de pantalla; los botones de solo icono tienen nombre.</li>
+      <li>Los avisos usan <code>role="status"</code>; los diálogos son <code>&lt;dialog&gt;</code> nativos.</li>
+    </ul>
+  </div>
+</section>
+{% endblock %}

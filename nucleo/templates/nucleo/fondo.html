@@ -1,0 +1,50 @@
+{% extends "nucleo/base.html" %}{% load sigma %}
+{% block titulo %}Fondo de caja{% endblock %}
+{% block contenido %}
+<div class="encabezado">
+  <div>
+    <h1>Fondo de caja</h1>
+    <p class="subtitulo">El saldo no se escribe: se calcula con las recargas, los anticipos entregados y los sobrantes devueltos.</p>
+  </div>
+</div>
+
+<div class="columnas">
+  <div>
+    <div class="lado">
+      <div class="cifra {% if saldo < 0 %}roja{% endif %}">
+        <div class="etiqueta">Saldo actual</div>
+        <div class="valor">{{ saldo|pesos }}</div>
+        <div class="nota">{% if saldo < 0 %}Fondo en descubierto: hay que recargarlo.{% else %}Disponible para entregar anticipos.{% endif %}</div>
+      </div>
+    </div>
+    <section class="seccion">
+      <h2>Recargas registradas</h2>
+      <div class="tabla">
+      <table>
+        <thead><tr><th>Fecha</th><th>Descripción</th><th>Registró</th><th class="num">Monto</th></tr></thead>
+        <tbody>
+        {% for r in recargas %}
+          <tr>
+            <td>{{ r.fecha|fecha }}</td>
+            <td class="ajustar">{{ r.descripcion|default:"—" }}</td>
+            <td>{{ r.registrada_por.get_full_name|default:r.registrada_por.username }}</td>
+            <td class="num">{{ r.monto|pesos }}</td>
+          </tr>
+        {% empty %}
+          <tr><td class="vacia" colspan="4">Todavía no hay recargas.</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      </div>
+    </section>
+  </div>
+  <div class="panel">
+    <div class="cabeza"><h2>Registrar una recarga</h2></div>
+    <form method="post" class="formulario">
+      {% csrf_token %}
+      {{ form.as_div }}
+      <div class="acciones"><button class="boton" type="submit">Registrar recarga</button></div>
+    </form>
+  </div>
+</div>
+{% endblock %}

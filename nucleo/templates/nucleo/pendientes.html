@@ -1,0 +1,40 @@
+{% extends "nucleo/base.html" %}{% load sigma static %}
+{% block titulo %}Por aprobar{% endblock %}
+{% block contenido %}
+<div class="encabezado">
+  <div>
+    <h1>Gastos por aprobar</h1>
+    <p class="subtitulo">Del más antiguo al más reciente. Revisa el soporte antes de decidir; para rechazar hay que escribir el motivo.</p>
+  </div>
+  {% if gastos %}<span class="ayuda">{{ gastos|length }} pendiente{{ gastos|length|pluralize }}</span>{% endif %}
+</div>
+<div class="bandeja">
+{% for g in gastos %}
+<div class="pendiente-item">
+  <img class="foto" src="{% static g.camion.foto %}" alt="{{ g.camion.get_tipo_display }}" width="72" height="48" loading="lazy" decoding="async">
+  <div>
+    <div><a class="id" href="{% url 'gasto' g.pk %}">G-{{ g.pk }}</a> · <strong>{{ g.descripcion }}</strong></div>
+    <div class="meta">{{ g.camion.placa }} ({{ g.camion.get_tipo_display }}) · {{ g.categoria }} · {{ g.proveedor }}</div>
+    <div class="meta">{{ g.registrado_por.get_full_name|default:g.registrado_por.username }} · {{ g.fecha|fecha }} · <a href="{% url 'anticipo' g.anticipo_id %}">Anticipo A-{{ g.anticipo_id }}</a> · <a href="{% url 'soporte' g.pk %}" target="_blank" rel="noopener">Ver soporte</a></div>
+  </div>
+  <div class="monto">{{ g.monto|pesos }}<small class="hace">hace {{ g.registrado_en|hace }}</small></div>
+  {% if g.registrado_por_id == user.id %}
+  <p class="propio ayuda">Este gasto lo registraste tú: lo tiene que revisar otra persona.</p>
+  {% else %}
+  <form method="post">
+    {% csrf_token %}
+    <input type="hidden" name="siguiente" value="pendientes">
+    <input type="text" name="motivo" placeholder="Motivo (obligatorio al rechazar)" aria-label="Motivo u observación sobre el gasto G-{{ g.pk }}">
+    <button class="boton ok" aria-label="Aprobar gasto G-{{ g.pk }}" type="submit" formaction="{% url 'gasto_revisar' g.pk 'aprobar' %}"><svg class="icono"><use href="#i-ok"/></svg>Aprobar</button>
+    <button class="boton peligro" aria-label="Rechazar gasto G-{{ g.pk }}" type="submit" formaction="{% url 'gasto_revisar' g.pk 'rechazar' %}">Rechazar</button>
+  </form>
+  {% endif %}
+</div>
+{% empty %}
+<div class="vacio"><svg class="vacia-ilustra"><use href="#i-aprobar"/></svg>
+  <strong>No hay gastos esperando aprobación</strong>
+  Cuando un técnico registre uno, aparecerá aquí.
+</div>
+{% endfor %}
+</div>
+{% endblock %}

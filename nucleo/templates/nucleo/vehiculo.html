@@ -1,0 +1,50 @@
+{% extends "nucleo/base.html" %}{% load sigma static %}
+{% block titulo %}{{ camion.placa }}{% endblock %}
+{% block contenido %}
+<nav class="migas"><a href="{% url 'flota' %}">Flota</a><span>/</span><span>{{ camion.placa }}</span></nav>
+
+<div class="cabecera-vehiculo">
+  <img src="{% static camion.foto %}" alt="{{ camion.get_tipo_display }} de placa {{ camion.placa }}" width="240" height="160">
+  <div>
+    <h1>{{ camion.placa }} <span class="estado estado-{% if camion.activo %}APROBADO{% else %}CERRADO{% endif %}">{% if camion.activo %}En servicio{% else %}Fuera de servicio{% endif %}</span></h1>
+    <p class="subtitulo">{{ camion.get_tipo_display }}{% if camion.descripcion %} · {{ camion.descripcion }}{% endif %}</p>
+    <dl class="datos compactos">
+      <dt>Conductor</dt><dd>{% if camion.conductor %}{% include "nucleo/_persona.html" with nombre=camion.conductor.nombre %}{% else %}<span class="ayuda">Sin asignar</span>{% endif %}</dd>
+      <dt>Gastos registrados</dt><dd>{{ gastos|length }} en total</dd>
+    </dl>
+  </div>
+</div>
+
+<div class="cifras">
+  <div class="cifra">
+    <div class="etiqueta">Aprobado en {{ anio }}</div>
+    <div class="valor">{{ total_anio|pesos }}</div>
+    <div class="nota">{{ cantidad_anio }} gasto{{ cantidad_anio|pluralize }}</div>
+  </div>
+  <div class="cifra {% if pendiente %}ambar{% endif %}">
+    <div class="etiqueta">Por aprobar</div>
+    <div class="valor">{{ pendiente|pesos }}</div>
+  </div>
+</div>
+
+<div class="columnas seccion apilar-1200">
+  <section>
+    <h2>Historial de mantenimiento</h2>
+    {% include "nucleo/_tabla_gastos.html" with con_tecnico=True sin_camion=True vacio="Este vehículo todavía no tiene gastos registrados." %}
+  </section>
+  <div class="panel">
+    <div class="cabeza"><h2>Por categoría</h2><span class="ayuda">aprobado {{ anio }}</span></div>
+    <div class="barras compactas">
+      {% for f in por_categoria %}
+      <div class="fila">
+        <span>{{ f.categoria__nombre }}</span>
+        <div class="pista"><div class="relleno" style="width:{% widthratio f.total max_categoria 100 %}%"></div></div>
+        <span class="cuanto">{{ f.total|pesos }}</span>
+      </div>
+      {% empty %}
+      <p class="vacio">Sin gastos aprobados en {{ anio }}.</p>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

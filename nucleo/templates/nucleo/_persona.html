@@ -1,0 +1,1 @@
+{% load sigma static %}<span class="persona">{% with foto=nombre|foto_persona %}{% if foto %}<img class="avatar chico" src="{% static foto %}" alt="" width="24" height="24" loading="lazy">{% else %}<span class="avatar chico" aria-hidden="true">{{ nombre|iniciales }}</span>{% endif %}{% endwith %}{{ nombre }}</span>

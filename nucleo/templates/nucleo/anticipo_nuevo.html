@@ -1,0 +1,33 @@
+{% extends "nucleo/base.html" %}{% load sigma %}
+{% block titulo %}Entregar anticipo{% endblock %}
+{% block contenido %}
+<nav class="migas"><a href="{% url 'anticipos' %}">Anticipos</a><span>/</span><span>Entregar</span></nav>
+<div class="encabezado">
+  <div>
+    <h1>Entregar anticipo</h1>
+    <p class="subtitulo">El efectivo sale del fondo de caja y queda a cargo del técnico hasta que lo legalice.</p>
+  </div>
+</div>
+<div class="columnas">
+  <div class="panel">
+    <form method="post" class="formulario">
+      {% csrf_token %}
+      {{ form.as_div }}
+      <div class="acciones">
+        <button class="boton" type="submit">Entregar anticipo</button>
+        <a class="boton secundario" href="{% url 'anticipos' %}">Cancelar</a>
+      </div>
+    </form>
+  </div>
+  <div class="lado">
+    <div class="cifra {% if saldo_fondo < 0 %}roja{% endif %}">
+      <div class="etiqueta">Saldo actual del fondo</div>
+      <div class="valor">{{ saldo_fondo|pesos }}</div>
+      <div class="nota">{% if saldo_fondo < 0 %}El fondo ya está en descubierto.{% else %}Disponible para entregar.{% endif %}</div>
+    </div>
+    <div class="mensaje warning" role="note"><svg class="icono"><use href="#i-alerta"/></svg><span>
+      Se puede entregar más de lo que hay en el fondo, pero queda en descubierto y el sistema lo señala en el inicio hasta que se recargue.
+    </span></div>
+  </div>
+</div>
+{% endblock %}

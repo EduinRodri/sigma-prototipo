@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 160" preserveAspectRatio="xMaxYMax slice" role="img" aria-label="Camión de reparto en una ruta entre bananeras">
+  <!-- lomas -->
+  <path d="M0 112C80 84 150 98 230 90S400 70 470 88 590 96 640 82V160H0z" fill="#ffffff" fill-opacity=".07"/>
+  <!-- matas de banano -->
+  <g stroke="#ffffff" stroke-opacity=".28" stroke-width="2" stroke-linecap="round" fill="none">
+    <g transform="translate(60 118)"><path d="M0 0V-26"/><path d="M0-26C-12-28-22-22-26-12M0-26C12-28 22-22 26-12M0-26C-6-38-16-40-24-36M0-26C6-38 16-40 24-36"/></g>
+    <g transform="translate(118 122) scale(.8)"><path d="M0 0V-26"/><path d="M0-26C-12-28-22-22-26-12M0-26C12-28 22-22 26-12M0-26C-6-38-16-40-24-36M0-26C6-38 16-40 24-36"/></g>
+    <g transform="translate(520 118)"><path d="M0 0V-26"/><path d="M0-26C-12-28-22-22-26-12M0-26C12-28 22-22 26-12M0-26C-6-38-16-40-24-36M0-26C6-38 16-40 24-36"/></g>
+    <g transform="translate(584 122) scale(.8)"><path d="M0 0V-26"/><path d="M0-26C-12-28-22-22-26-12M0-26C12-28 22-22 26-12M0-26C-6-38-16-40-24-36M0-26C6-38 16-40 24-36"/></g>
+  </g>
+  <!-- camión -->
+  <g transform="translate(250 70)" fill="none" stroke="#e2b33c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M0 8h96v52H0z"/><path d="M96 24h26l22 24v12H96"/><path d="M104 28h14l14 18h-28z" stroke-opacity=".7"/>
+    <path d="M10 24h76M10 40h76" stroke-opacity=".35"/>
+    <circle cx="28" cy="64" r="11" fill="#1f4a2a"/><circle cx="118" cy="64" r="11" fill="#1f4a2a"/>
+    <circle cx="28" cy="64" r="3"/><circle cx="118" cy="64" r="3"/>
+  </g>
+  <!-- carretera -->
+  <path d="M0 140h640" stroke="#ffffff" stroke-opacity=".35" stroke-width="2"/>
+  <path d="M0 150h640" stroke="#ffffff" stroke-opacity=".2" stroke-width="2" stroke-dasharray="26 18"/>
+</svg>

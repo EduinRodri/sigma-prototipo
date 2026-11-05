@@ -1,0 +1,84 @@
+{% extends "nucleo/base.html" %}{% load sigma static %}
+{% block titulo %}Gasto G-{{ gasto.pk }}{% endblock %}
+{% block contenido %}
+<nav class="migas"><a href="{% url 'anticipos' %}">Anticipos</a><span>/</span><a href="{% url 'anticipo' gasto.anticipo_id %}">A-{{ gasto.anticipo_id }}</a><span>/</span><span>G-{{ gasto.pk }}</span></nav>
+<div class="encabezado">
+  <div>
+    <h1>Gasto G-{{ gasto.pk }} <span class="estado estado-{{ gasto.estado }}">{{ gasto.get_estado_display }}</span></h1>
+    <p class="subtitulo">{{ gasto.descripcion }}</p>
+  </div>
+</div>
+
+<div class="columnas">
+  <div>
+    <div class="panel">
+      <div class="cabeza"><h2>Detalle</h2><span class="cifra-grande {% if gasto.estado == 'ANULADO' or gasto.estado == 'RECHAZADO' %}tachada{% endif %}">{{ gasto.monto|pesos }}</span></div>
+      <div class="ficha-vehiculo">
+        <img src="{% static gasto.camion.foto %}" alt="{{ gasto.camion.get_tipo_display }}" width="120" height="80">
+        <div><strong>{{ gasto.camion.placa }}</strong><br><span class="ayuda">{{ gasto.camion.get_tipo_display }}{% if gasto.camion.conductor %} · Conductor: {{ gasto.camion.conductor }}{% endif %}</span></div>
+      </div>
+      <dl class="datos">
+        <dt>Fecha</dt><dd>{{ gasto.fecha|fecha }}</dd>
+        <dt>Categoría</dt><dd>{{ gasto.categoria }}</dd>
+        <dt>Proveedor</dt><dd>{{ gasto.proveedor }}</dd>
+        <dt>Técnico</dt><dd>{{ gasto.anticipo.tecnico.get_full_name|default:gasto.anticipo.tecnico.username }}</dd>
+        <dt>Soporte</dt><dd><a class="archivo" href="{% url 'soporte' gasto.pk %}" target="_blank" rel="noopener"><svg class="icono"><use href="#i-archivo"/></svg>{{ gasto.soporte.nombre_archivo }}</a></dd>
+        {% if gasto.reemplaza %}<dt>Reemplaza a</dt><dd><a href="{% url 'gasto' gasto.reemplaza_id %}">G-{{ gasto.reemplaza_id }}</a> <span class="ayuda">(anulado)</span></dd>{% endif %}
+        {% if gasto.reemplazado_por %}<dt>Reemplazado por</dt><dd><a href="{% url 'gasto' gasto.reemplazado_por.pk %}">G-{{ gasto.reemplazado_por.pk }}</a></dd>{% endif %}
+      </dl>
+    </div>
+
+    {% if puede_revisar %}
+    <div class="panel">
+      <div class="cabeza"><h2>Revisión de la dirección</h2></div>
+      <form method="post" class="formulario">
+        {% csrf_token %}
+        <div><label for="id_motivo">Motivo u observación</label>{{ form.motivo }}
+          <span class="ayuda">Obligatorio para rechazar.</span></div>
+        <div class="acciones">
+          <button class="boton ok" type="submit" formaction="{% url 'gasto_revisar' gasto.pk 'aprobar' %}"><svg class="icono"><use href="#i-ok"/></svg>Aprobar</button>
+          <button class="boton peligro" type="submit" formaction="{% url 'gasto_revisar' gasto.pk 'rechazar' %}">Rechazar</button>
+        </div>
+      </form>
+    </div>
+    {% endif %}
+
+    {% if puede_anular %}
+    <div class="panel">
+      <div class="cabeza"><h2>Anular</h2></div>
+      <p class="ayuda" style="margin-top:0">Un gasto aprobado no se edita. Si tiene un error, se anula con su motivo: el monto vuelve al anticipo y el técnico registra el gasto correcto.</p>
+      <form method="post" action="{% url 'gasto_revisar' gasto.pk 'anular' %}" class="formulario">
+        {% csrf_token %}
+        <div><label for="id_motivo_anular">Motivo de la anulación</label>
+          <textarea name="motivo" id="id_motivo_anular" rows="2" required></textarea></div>
+        <div class="acciones"><button class="boton peligro" type="submit" data-confirmar="¿Anular este gasto? Se devuelve el valor al anticipo y queda el rastro." data-ok="Anular gasto">Anular gasto</button></div>
+      </form>
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="panel">
+    <div class="cabeza"><h2>Historial</h2></div>
+    <ul class="linea">
+      <li><span class="punto"></span>
+        <strong>Registrado</strong> por {{ gasto.registrado_por.get_full_name|default:gasto.registrado_por.username }}
+        <div class="cuando">{{ gasto.registrado_en|fechahora }}</div></li>
+      {% if gasto.revisado_en %}
+      <li><span class="punto {% if gasto.revisado_por and gasto.estado != 'RECHAZADO' %}ok{% else %}mal{% endif %}"></span>
+        <strong>{% if gasto.estado == "RECHAZADO" %}Rechazado{% else %}Aprobado{% endif %}</strong> por {{ gasto.revisado_por.get_full_name|default:gasto.revisado_por.username }}
+        <div class="cuando">{{ gasto.revisado_en|fechahora }}</div>
+        {% if gasto.motivo_revision %}<div class="motivo">{{ gasto.motivo_revision }}</div>{% endif %}</li>
+      {% else %}
+      <li><span class="punto espera"></span>
+        <strong>Esperando revisión</strong> de la dirección</li>
+      {% endif %}
+      {% if gasto.anulado_en %}
+      <li><span class="punto mal"></span>
+        <strong>Anulado</strong> por {{ gasto.anulado_por.get_full_name|default:gasto.anulado_por.username }}
+        <div class="cuando">{{ gasto.anulado_en|fechahora }}</div>
+        <div class="motivo">{{ gasto.motivo_anulacion }}</div></li>
+      {% endif %}
+    </ul>
+  </div>
+</div>
+{% endblock %}

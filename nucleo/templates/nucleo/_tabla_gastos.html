@@ -1,0 +1,21 @@
+{% load sigma %}
+<div class="tabla tabla-gastos">
+<table>
+  <thead><tr><th>Gasto</th><th>Fecha</th>{% if not sin_camion %}<th>Camión</th>{% endif %}<th>Categoría</th>{% if con_tecnico %}<th>Técnico</th>{% else %}<th>Proveedor</th>{% endif %}<th class="num">Monto</th><th>Estado</th></tr></thead>
+  <tbody>
+  {% for g in gastos %}
+    <tr class="{% if g.estado == 'ANULADO' or g.estado == 'RECHAZADO' %}anulada{% endif %}">
+      <td class="c-id"><a class="id" href="{% url 'gasto' g.pk %}">G-{{ g.pk }}</a>{% if not en_anticipo %}<span class="ayuda-celda">Anticipo A-{{ g.anticipo_id }}</span>{% endif %}</td>
+      <td class="c-fecha">{{ g.fecha|fecha }}</td>
+      {% if not sin_camion %}<td class="c-camion">{% include "nucleo/_vehiculo.html" with camion=g.camion %}</td>{% endif %}
+      <td class="c-cat">{% include "nucleo/_categoria.html" with c=g.categoria %}</td>
+      {% if con_tecnico %}<td class="c-quien">{{ g.anticipo.tecnico.get_full_name|default:g.anticipo.tecnico.username }}</td>{% else %}<td class="c-quien">{{ g.proveedor }}</td>{% endif %}
+      <td class="num c-monto">{{ g.monto|pesos }}</td>
+      <td class="c-estado"><span class="estado estado-{{ g.estado }}">{{ g.get_estado_display }}</span></td>
+    </tr>
+  {% empty %}
+    <tr><td class="vacia" colspan="7"><svg class="vacia-ilustra"><use href="#i-llave"/></svg><strong>Sin gastos</strong>{{ vacio|default:"No hay gastos para mostrar." }}</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>

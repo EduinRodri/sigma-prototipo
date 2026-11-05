@@ -1,0 +1,47 @@
+{% extends "nucleo/base.html" %}{% load sigma %}
+{% block titulo %}Registrar gasto{% endblock %}
+{% block contenido %}
+<nav class="migas"><a href="{% url 'anticipos' %}">Anticipos</a><span>/</span><a href="{% url 'anticipo' anticipo.pk %}">A-{{ anticipo.pk }}</a><span>/</span><span>Registrar gasto</span></nav>
+<div class="encabezado">
+  <div>
+    <h1>Registrar gasto</h1>
+    <p class="subtitulo">Queda pendiente hasta que la dirección lo apruebe.</p>
+  </div>
+</div>
+<div class="columnas">
+  <div class="panel">
+    <form method="post" enctype="multipart/form-data" class="formulario">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+      <div class="rejilla-2">
+        <div>{{ form.camion.label_tag }}{{ form.camion }}{{ form.camion.errors }}</div>
+        <div>{{ form.fecha.label_tag }}{{ form.fecha }}{{ form.fecha.errors }}</div>
+      </div>
+      <div class="rejilla-2">
+        <div>{{ form.categoria.label_tag }}{{ form.categoria }}{{ form.categoria.errors }}</div>
+        <div>{{ form.proveedor.label_tag }}{{ form.proveedor }}{{ form.proveedor.errors }}</div>
+      </div>
+      <div>{{ form.monto.label_tag }}{{ form.monto }}{{ form.monto.errors }}</div>
+      <div>{{ form.descripcion.label_tag }}{{ form.descripcion }}{{ form.descripcion.errors }}</div>
+      <div>{{ form.soporte.label_tag }}<label class="ayuda-foto"><svg class="icono"><use href="#i-camara"/></svg><span>Tomar foto</span><input type="file" accept="image/*" capture="environment" data-camara="{{ form.soporte.id_for_label }}"></label>{{ form.soporte }}<span class="ayuda">{{ form.soporte.help_text }}</span>{{ form.soporte.errors }}{% if request.method == "POST" and not form.soporte.errors %}<span class="ayuda aviso-adjunto">Por seguridad, el navegador no conserva el archivo: vuelve a adjuntarlo.</span>{% endif %}</div>
+      {% if form.reemplaza %}
+      <div>{{ form.reemplaza.label_tag }}{{ form.reemplaza }}<span class="ayuda">{{ form.reemplaza.help_text }}</span>{{ form.reemplaza.errors }}</div>
+      {% endif %}
+      <div class="acciones">
+        <button class="boton" type="submit">Registrar gasto</button>
+        <a class="boton secundario" href="{% url 'anticipo' anticipo.pk %}">Cancelar</a>
+      </div>
+    </form>
+  </div>
+  <div class="lado">
+    <div class="cifra">
+      <div class="etiqueta">Disponible en el anticipo A-{{ anticipo.pk }}</div>
+      <div class="valor">{{ anticipo.disponible|pesos }}</div>
+      <div class="nota">de {{ anticipo.monto|pesos }} entregados a {{ anticipo.tecnico.get_full_name|default:anticipo.tecnico.username }}</div>
+    </div>
+    <div class="panel ayuda">
+      Un gasto mayor que lo disponible no se acepta. Adjunta la factura o una foto donde se lea el valor, la fecha y el proveedor.
+    </div>
+  </div>
+</div>
+{% endblock %}

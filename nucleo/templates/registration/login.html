@@ -1,0 +1,44 @@
+{% extends "nucleo/base.html" %}{% load static sigma %}
+{% block titulo %}Ingresar{% endblock %}
+{% block cabeza %}<style>@view-transition { navigation: none; }</style>
+{% fotos_ingreso as fotos %}<link rel="preload" as="image" fetchpriority="high" href="{% static fotos.0 %}" media="(max-width: 900px)">{% endblock %}
+{% block cuerpo %}
+<div class="ingreso">
+  <header class="foto-flota">
+    <div class="carrusel" aria-hidden="true">
+      {% fotos_ingreso as fotos %}{% for foto in fotos %}<div class="diapositiva {% if '-v-' in foto %}solo-celular{% else %}solo-pc{% endif %}{% if forloop.first %} activa{% endif %}" style="background-image:url('{% static foto %}')"></div>{% endfor %}
+    </div>
+    <span class="cliente">
+      <svg class="logo-cliente" aria-hidden="true"><use href="#logo-garzas"/></svg>
+      <span><strong>Frutera Las Garzas</strong><small>Mantenimiento de flota</small></span>
+    </span>
+    <div><p>Anticipos de mantenimiento, gastos con su soporte y aprobación de la dirección. El saldo de caja se calcula, no se escribe.</p></div>
+  </header>
+  <main class="formulario-ingreso" id="contenido" tabindex="-1">
+    <div class="caja">
+      <span class="cliente-tarjeta"><svg class="logo-cliente" aria-hidden="true"><use href="#logo-garzas"/></svg><span><strong>Frutera Las Garzas</strong><small>Mantenimiento de flota</small></span></span>
+      <h1>Ingresar a SIGMA</h1>
+      <p class="subtitulo">Con el usuario de tu rol.</p>
+      {% if form.errors %}<div class="mensaje error" role="alert" style="margin:16px 0 0"><svg class="icono"><use href="#i-alerta"/></svg><span>Usuario o contraseña incorrectos.</span></div>{% endif %}
+      <form method="post" class="formulario">
+        {% csrf_token %}
+        <div><label for="id_username">Usuario</label>{{ form.username }}</div>
+        <div><label for="id_password">Contraseña</label><span class="campo-clave">{{ form.password }}<button type="button" class="ver-clave" hidden aria-pressed="false" aria-controls="id_password" aria-label="Mostrar contraseña"><svg class="icono"><use href="#i-ojo"/></svg></button></span></div>
+        <input type="hidden" name="next" value="{{ next }}">
+        <button class="boton" type="submit">Ingresar</button>
+      </form>
+      <details class="aviso-demo">
+        <summary>Usuarios de prueba</summary>
+        <p>Toca uno para llenar el usuario; la contraseña es la de la demostración.</p>
+        <div class="usuarios-demo">
+          <button type="button" data-usuario="direccion"><b>Dirección</b><small>aprueba y anula</small></button>
+          <button type="button" data-usuario="administrativa"><b>Administrativa</b><small>entrega anticipos</small></button>
+          <button type="button" data-usuario="tecnico"><b>Técnico</b><small>registra gastos</small></button>
+          <button type="button" data-usuario="tecnico2"><b>Técnico 2</b><small>registra gastos</small></button>
+        </div>
+      </details>
+      <div class="producto"><b>SIGMA</b> v0.4 · Prototipo académico con datos ficticios</div>
+    </div>
+  </main>
+</div>
+{% endblock %}

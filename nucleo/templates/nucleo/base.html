@@ -1,0 +1,84 @@
+{% load static sigma %}<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#2f6b3a">
+  <script>try{var t=localStorage.getItem("sigma-tema");if(t)document.documentElement.dataset.tema=t}catch(e){}</script>
+  <link rel="manifest" href="{% url 'manifest' %}">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>{% block titulo %}Inicio{% endblock %} · SIGMA · Frutera Las Garzas</title>
+  <link rel="icon" type="image/svg+xml" href="{% static 'nucleo/img/logo-garzas.svg' %}">
+  <link rel="apple-touch-icon" href="{% static 'nucleo/img/iconos/apple-touch-icon.png' %}">
+  <link rel="preload" href="{% static 'nucleo/fuentes/inter-latin-wght.woff2' %}" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="{% static 'nucleo/fuentes/outfit-latin-wght.woff2' %}" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="{% static 'nucleo/sigma.css' %}">
+  {% block cabeza %}{% endblock %}
+</head>
+<body>
+<div class="progreso" aria-hidden="true"></div>
+<div class="espera" aria-live="polite"><div><svg class="logo-cliente"><use href="#logo-garzas"/></svg><strong>Un momento…</strong><span>El servidor gratuito puede tardar unos segundos en despertar.</span></div></div>
+{% include "nucleo/_iconos.html" %}
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+{% block cuerpo %}
+<div class="app">
+  <aside class="lateral">
+    <a class="cliente" href="{% url 'inicio' %}" aria-label="Frutera Las Garzas, mantenimiento de flota: ir al inicio">
+      <svg class="logo-cliente" aria-hidden="true"><use href="#logo-garzas"/></svg>
+      <span><strong>Frutera Las Garzas</strong><small>Mantenimiento de flota</small></span>
+    </a>
+    {% with url=request.resolver_match.url_name %}
+    <nav class="menu" aria-label="Menú principal">
+      <a href="{% url 'inicio' %}" data-ir="i" class="{% if url == 'inicio' %}activo{% endif %}"><svg class="icono"><use href="#i-inicio"/></svg>Inicio</a>
+      <a href="{% url 'anticipos' %}" data-ir="a" class="{% if url == 'anticipos' or url == 'anticipo' or url == 'anticipo_nuevo' or url == 'gasto_nuevo' or url == 'gasto' %}activo{% endif %}"><svg class="icono"><use href="#i-anticipo"/></svg>Anticipos</a>
+      {% if es_direccion %}
+      <a href="{% url 'pendientes' %}" data-ir="p" class="{% if url == 'pendientes' %}activo{% endif %}"><svg class="icono"><use href="#i-aprobar"/></svg>Por aprobar{% if por_aprobar %}<span class="contador">{{ por_aprobar }}</span>{% endif %}</a>
+      {% endif %}
+      {% if es_gestion %}
+      <a href="{% url 'flota' %}" data-ir="f" class="{% if url == 'flota' or url == 'vehiculo' %}activo{% endif %}"><svg class="icono"><use href="#i-camion"/></svg>Flota</a>
+      <button type="button" class="mas-boton" aria-expanded="false" aria-controls="mas-menu"><svg class="icono"><use href="#i-catalogo"/></svg>Más</button>
+      <div class="mas" id="mas-menu">
+      <span class="grupo">Administración</span>
+      <a href="{% url 'fondo' %}" class="{% if url == 'fondo' %}activo{% endif %}"><svg class="icono"><use href="#i-fondo"/></svg>Fondo de caja</a>
+      <a href="{% url 'reportes' %}" class="{% if url == 'reportes' %}activo{% endif %}"><svg class="icono"><use href="#i-reporte"/></svg>Reportes</a>
+      <a href="{% url 'admin:index' %}"><svg class="icono"><use href="#i-catalogo"/></svg>Catálogos</a>
+      </div>
+      {% endif %}
+    </nav>
+    {% endwith %}
+    <div class="producto"><b>SIGMA</b> v0.4 · Gastos de flota</div>
+  </aside>
+
+  <header class="superior">
+    <form class="buscador" method="get" action="{% url 'anticipos' %}" role="search">
+      <svg class="icono"><use href="#i-buscar"/></svg>
+      <input type="search" name="q" value="{{ request.GET.q }}" placeholder="Buscar anticipo, técnico o placa" aria-label="Buscar" accesskey="/"><kbd class="atajo-tecla" aria-hidden="true">/</kbd>
+    </form>
+    <div class="usuario">
+      <a class="buscar-movil" href="{% url 'anticipos' %}#buscar" aria-label="Buscar"><svg class="icono"><use href="#i-buscar"/></svg></a>
+      <span class="quien"><span class="nombre">{{ user.get_full_name|default:user.username }}</span><br><span class="rol">{{ rol_actual }}</span></span>
+      {% with foto=user.get_full_name|foto_persona %}{% if foto %}<img class="avatar" src="{% static foto %}" alt="" width="30" height="30">{% else %}<span class="avatar" aria-hidden="true">{{ iniciales }}</span>{% endif %}{% endwith %}
+      {% if es_gestion %}<button type="button" class="menu-gestion" aria-expanded="false" aria-controls="mas-menu" aria-label="Administración: fondo de caja, reportes y catálogos" title="Administración"><svg class="icono"><use href="#i-catalogo"/></svg></button>{% endif %}
+      <button type="button" class="tema" aria-label="Cambiar entre tema claro y oscuro" title="Tema"><svg class="icono sol"><use href="#i-sol"/></svg><svg class="icono luna"><use href="#i-luna"/></svg></button>
+      <form method="post" action="{% url 'logout' %}">{% csrf_token %}
+        <button type="submit" title="Salir" aria-label="Salir"><svg class="icono"><use href="#i-salir"/></svg></button>
+      </form>
+    </div>
+  </header>
+
+  <div class="contenido">
+    <main id="contenido" tabindex="-1">
+      {% if messages %}<div class="avisos">{% endif %}
+      {% for m in messages %}
+      <div class="mensaje {{ m.tags }}" role="status"><svg class="icono"><use href="#{% if m.tags == 'success' %}i-ok{% else %}i-alerta{% endif %}"/></svg><span>{{ m }}</span><button type="button" class="cerrar" aria-label="Cerrar aviso">&times;</button></div>
+      {% endfor %}
+      {% if messages %}</div>{% endif %}
+      {% block contenido %}{% endblock %}
+    </main>
+    <footer class="pie"><a href="{% url 'guia' %}">Guía de diseño</a> · SIGMA · Prototipo académico de Proyecto de Software. Frutera Las Garzas es una empresa ficticia y todos los datos son de prueba. Fotos de vehículos: Jason Lawrence, Wikimedia Commons (CC BY 2.0).</footer>
+  </div>
+</div>
+{% endblock %}
+<script src="{% static 'nucleo/sigma.js' %}" defer></script>
+</body>
+</html>

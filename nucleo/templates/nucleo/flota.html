@@ -1,0 +1,55 @@
+{% extends "nucleo/base.html" %}{% load sigma static %}
+{% block titulo %}Flota{% endblock %}
+{% block contenido %}
+<div class="encabezado">
+  <div>
+    <h1>Flota</h1>
+    <p class="subtitulo">Vehículos de reparto y lo que se ha gastado en su mantenimiento en {{ anio }}.</p>
+  </div>
+</div>
+
+<div class="cifras">
+  <div class="cifra">
+    <div class="etiqueta">Vehículos</div>
+    <div class="valor">{{ total_flota }}</div>
+    <div class="nota">{% with f=conteos.FURGON|default:0 s=conteos.SENCILLO|default:0 %}{{ f }} {{ f|pluralize:"furgón,furgones" }} · {{ s }} {{ s|pluralize:"camión sencillo,camiones sencillos" }}{% endwith %}</div>
+  </div>
+  <div class="cifra">
+    <div class="etiqueta">Gasto aprobado en {{ anio }}{% if tipo != "TODOS" %} (filtro){% endif %}</div>
+    <div class="valor">{{ total_anio|pesos }}</div>
+  </div>
+  <div class="cifra fila-completa {% if con_pendientes %}ambar{% endif %}">
+    <div class="etiqueta">Con gastos por aprobar</div>
+    <div class="valor">{{ con_pendientes }}</div>
+  </div>
+</div>
+
+<div class="tabla seccion">
+  <div class="barra-tabla">
+    <nav class="pestanas" aria-label="Filtrar por tipo">
+      <a href="?" class="{% if tipo == 'TODOS' %}activo{% endif %}">Todos<span>{{ total_flota }}</span></a>
+      {% for valor, nombre in tipos %}
+      <a href="?tipo={{ valor }}" class="{% if tipo == valor %}activo{% endif %}">{{ nombre }}<span>{{ conteos|get_item:valor|default:0 }}</span></a>
+      {% endfor %}
+    </nav>
+  </div>
+  <table class="tabla-flota">
+    <thead><tr><th>Vehículo</th><th>Descripción</th><th>Conductor</th><th class="num">Gastos {{ anio }}</th><th class="num">Aprobado {{ anio }}</th><th>Último gasto</th><th>Estado</th></tr></thead>
+    <tbody>
+    {% for c in camiones %}
+      <tr class="fila-enlace">
+        <td><a href="{% url 'vehiculo' c.placa %}" class="vehiculo grande"><img src="{% static c.foto %}" alt="" width="72" height="48" loading="lazy"><span><b>{{ c.placa }}</b><small>{{ c.get_tipo_display }}</small></span></a></td>
+        <td>{{ c.descripcion|default:"—" }}</td>
+        <td>{% if c.conductor %}{% include "nucleo/_persona.html" with nombre=c.conductor.nombre %}{% else %}<span class="ayuda">Sin asignar</span>{% endif %}</td>
+        <td class="num">{{ c.cantidad }}</td>
+        <td class="num">{{ c.total|default:0|pesos }}</td>
+        <td>{{ c.ultimo|fecha|default:"—" }}{% if c.pendientes %}<span class="ayuda-celda">{{ c.pendientes }} por aprobar</span>{% endif %}</td>
+        <td><span class="estado estado-{% if c.activo %}APROBADO{% else %}CERRADO{% endif %}">{% if c.activo %}En servicio{% else %}Fuera de servicio{% endif %}</span></td>
+      </tr>
+    {% empty %}
+      <tr><td class="vacia" colspan="7"><strong>No hay vehículos de este tipo</strong>Los vehículos se registran en Catálogos.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

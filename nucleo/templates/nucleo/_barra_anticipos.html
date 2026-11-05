@@ -1,0 +1,12 @@
+<div class="barra-tabla">
+  <nav class="pestanas" aria-label="Filtrar por estado">
+    <a href="?estado=ABIERTO{% if q %}&q={{ q|urlencode }}{% endif %}" class="{% if estado == 'ABIERTO' %}activo{% endif %}">Abiertos<span>{{ conteos.ABIERTO|default:0 }}</span></a>
+    <a href="?estado=CERRADO{% if q %}&q={{ q|urlencode }}{% endif %}" class="{% if estado == 'CERRADO' %}activo{% endif %}">Cerrados<span>{{ conteos.CERRADO|default:0 }}</span></a>
+    <a href="?estado=TODOS{% if q %}&q={{ q|urlencode }}{% endif %}" class="{% if estado == 'TODOS' %}activo{% endif %}">Todos<span>{{ total }}</span></a>
+  </nav>
+  <form method="get" role="search">
+    <input type="hidden" name="estado" value="{{ estado }}">
+    <span class="buscador"><svg class="icono"><use href="#i-buscar"/></svg><input type="search" name="q" value="{{ q }}" placeholder="Técnico, número o placa" aria-label="Buscar anticipos"></span>
+    {% if q %}<a class="enlace-suave" href="?estado={{ estado }}">Limpiar</a>{% endif %}
+  </form>
+</div>

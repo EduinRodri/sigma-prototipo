@@ -1,0 +1,105 @@
+{% extends "admin/base.html" %}{% load static %}
+{# Panel de catálogos con la marca y los colores de SIGMA, para que no parezca otra aplicación. #}
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{# Sin modo oscuro: el panel siempre en claro, igual que el resto de SIGMA. #}
+{% block dark-mode-vars %}{% endblock %}
+
+{% block extrastyle %}{{ block.super }}
+<style>
+  html[data-theme="light"], :root {
+    --primary: #2f6b3a;
+    --secondary: #24552d;
+    --accent: #e2b33c;
+    --primary-fg: #fff;
+    --header-color: #fff;
+    --header-branding-color: #fff;
+    --header-bg: #24552d;
+    --header-link-color: #fff;
+    --breadcrumbs-bg: #2f6b3a;
+    --breadcrumbs-link-fg: #fff;
+    --link-fg: #2f6b3a;
+    --link-hover-color: #1d4524;
+    --link-selected-fg: #24552d;
+    --button-bg: #2f6b3a;
+    --button-hover-bg: #24552d;
+    --default-button-bg: #24552d;
+    --default-button-hover-bg: #1d4524;
+    --selected-row: #eef5ef;
+    --font-family-primary: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  #branding h1 { display: flex; align-items: center; gap: 10px; font-weight: 600; }
+  #branding img { width: 28px; height: 28px; border-radius: 50%; outline: 2px solid rgba(255,255,255,.55); }
+  .module h2, .module caption, .inline-group h2 { background: #2f6b3a; }
+  #user-tools .theme-toggle { display: none; }
+  /* Accesibilidad: contraste, enlaces subrayados y blancos táctiles de 24 px o más (WCAG 2.2 AA) */
+  div.breadcrumbs { color: #fff; }
+  div.breadcrumbs a { color: #fff; text-decoration: underline; display: inline-block; padding: 6px 4px; }
+  #user-tools a, #user-tools button:not(.theme-toggle) { display: inline-block; padding: 8px 6px; }
+  #user-tools { line-height: 1.6; }
+  #changelist-filter li a, #changelist-filter summary { display: block; padding: 6px 0; }
+
+  /* Fondo, tarjetas y tipografía iguales a las de SIGMA */
+  @font-face { font-family: "Inter"; src: url("{% static 'nucleo/fuentes/inter-latin-wght.woff2' %}") format("woff2"); font-weight: 100 900; font-display: swap; }
+  @font-face { font-family: "Outfit"; src: url("{% static 'nucleo/fuentes/outfit-latin-wght.woff2' %}") format("woff2"); font-weight: 100 900; font-display: swap; }
+  body { background: #f3f2ea; color: #1b2a20; }
+  #main, .main, #content, #content-main, .content { background: transparent; }
+  #header { padding: 12px 24px; align-items: center; }
+  #site-name, #site-name a { color: #fff !important; font-family: "Outfit", "Inter", sans-serif; font-size: 1.15rem; font-weight: 600; }
+  #content > h1, #content h1 { font-family: "Outfit", "Inter", sans-serif; font-weight: 600; color: #1f2a22; }
+  .module, #changelist, #content-related, fieldset.module { background: #fff; border: 1px solid #e2dfd3; border-radius: 10px; overflow: hidden; }
+  #changelist { padding: 0; }
+  .submit-row, #changelist-search, .actions { background: #fff; border-radius: 8px; }
+  input[type=text], input[type=search], input[type=number], input[type=password], select, textarea { border-radius: 6px !important; min-height: 38px; }
+  .button, input[type=submit], .submit-row a.deletelink, a.addlink, .object-tools a { border-radius: 6px !important; }
+  .object-tools a { background: #2f6b3a; }
+  #user-tools .salir-form { display: inline; }
+  #user-tools .salir-form button { background: none; border: 0; color: #fff; font: inherit; text-transform: inherit; letter-spacing: inherit; cursor: pointer; }
+
+  /* Celular y tableta: cabecera de una línea, sin barra lateral y listas como tarjetas */
+  @media (max-width: 767px) {
+    #header { display: flex; flex-flow: row nowrap; justify-content: space-between; gap: 10px; padding: 8px 14px; min-height: 52px; }
+    #branding { flex: 1 1 auto; min-width: 0; }
+    #site-name, #site-name a { font-size: .92rem; line-height: 1.15; margin: 0; }
+    #site-name img { width: 30px; height: 30px; flex: none; }
+    #user-tools { flex: none; margin: 0; padding: 0; font-size: .74rem; text-align: right; white-space: nowrap; }
+    #user-tools .solo-pc, #user-tools .separador { display: none; }
+    #user-tools a, #user-tools button:not(.theme-toggle) { min-height: 44px; display: inline-flex; align-items: center; padding: 0 6px; border: 0; }
+    div.breadcrumbs { padding: 4px 14px; font-size: .8rem; }
+    #toggle-nav-sidebar, #nav-sidebar { display: none !important; }
+    .main > .content, #content { padding: 14px; width: auto; }
+    #content h1, #content > h1 { font-size: 1.3rem; margin: 2px 0 10px; }
+    .object-tools { margin: 0 0 12px; float: none; }
+    .object-tools a { display: flex; justify-content: center; min-height: 44px; align-items: center; color: #fff; }
+    #changelist .changelist-form-container { display: block; }
+    #changelist-filter { display: none; }
+    #changelist table, #changelist tbody, #changelist tr, #changelist td, #changelist th { display: block; width: auto; }
+    #changelist thead { display: none; }
+    #changelist tbody tr { padding: 12px 14px; border-bottom: 1px solid #e2dfd3; background: #fff; }
+    #changelist tbody th, #changelist tbody td { padding: 2px 0; border: 0; font-size: .92rem; }
+    #changelist tbody th a { font-weight: 600; font-size: 1rem; display: inline-flex; min-height: 28px; align-items: center; }
+    .paginator { padding: 10px 14px; }
+    #changelist-search { padding: 10px; }
+    #changelist-search input[type=text] { width: 60%; }
+    .form-row { padding: 12px 14px; }
+    fieldset.module input[type=text], fieldset.module select, fieldset.module textarea { width: 100%; box-sizing: border-box; }
+    .submit-row { display: grid; gap: 8px; padding: 12px; }
+    .submit-row input { width: 100%; min-height: 44px; margin: 0 !important; }
+    #content-related { margin: 12px 0 0; }
+  }
+</style>
+{% endblock %}
+
+{% block branding %}
+<div id="site-name"><a href="{% url 'admin:index' %}" style="display:flex;align-items:center;gap:10px">
+  <img src="{% static 'nucleo/img/logo-garzas.svg' %}" width="28" height="28" alt="">
+  {{ site_header|default:_('Django administration') }}</a></div>
+{% endblock %}
+
+{% block welcome-msg %}{% endblock %}
+
+{% block userlinks %}<a href="{% url 'inicio' %}">Volver a SIGMA</a>
+<span class="separador">/</span> <a class="solo-pc" href="{% url 'admin:password_change' %}">Cambiar contraseña</a>
+<span class="separador">/</span> <form class="salir-form" method="post" action="{% url 'logout' %}">{% csrf_token %}<button type="submit">Salir</button></form>{% endblock %}
+
+{% block nav-global %}{% endblock %}

@@ -1,0 +1,16 @@
+# Archivos temporales de Office
+~$*
+*.tmp
+
+# Sistema
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Python / Django
+__pycache__/
+*.pyc
+.venv/
+db.sqlite3
+staticfiles/
+.env

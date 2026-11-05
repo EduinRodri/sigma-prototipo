@@ -1,0 +1,63 @@
+{% extends "nucleo/base.html" %}{% load sigma %}
+{% block titulo %}Inicio{% endblock %}
+{% block contenido %}
+<div class="encabezado bienvenida">
+  <div>
+    <h1>Hola, {{ user.first_name|default:user.username }}</h1>
+    <p class="subtitulo">{% now "l j \d\e F \d\e Y" as hoy %}{{ hoy|lower|capfirst }}</p>
+  </div>
+  {% if es_tecnico and not es_gestion and abiertos %}
+  <a class="boton principal" href="{% url 'gasto_nuevo' abiertos.0.pk %}"><svg class="icono"><use href="#i-mas"/></svg><span class="texto-fab">Registrar gasto</span></a>
+  {% elif es_gestion %}
+  <a class="boton principal" href="{% url 'anticipo_nuevo' %}"><svg class="icono"><use href="#i-mas"/></svg><span class="texto-fab">Entregar anticipo</span></a>
+  {% endif %}
+</div>
+
+{% if alertas %}
+<div class="alertas" role="region" aria-label="Requiere tu atención">
+  {% for a in alertas %}<a class="alerta-fila {{ a.tono }}" href="{{ a.url }}"><svg class="icono"><use href="#{{ a.icono }}"/></svg><span>{{ a.texto }}</span><b>{{ a.accion }}</b></a>{% endfor %}
+</div>
+{% endif %}
+
+<nav class="atajos" aria-label="Accesos rápidos">
+  <a class="atajo" href="{% url 'anticipos' %}"><span class="chip"><svg class="icono"><use href="#i-billete"/></svg></span><b>{% if es_gestion %}Anticipos{% else %}Mis anticipos{% endif %}</b><small>{{ abiertos|length }} abierto{{ abiertos|length|pluralize }}</small></a>
+  {% if es_direccion %}<a class="atajo {% if pendientes %}aviso{% endif %}" href="{% url 'pendientes' %}"><span class="chip"><svg class="icono"><use href="#i-aprobar"/></svg></span><b>Por aprobar</b><small>{{ pendientes }} pendiente{{ pendientes|pluralize }}</small></a>{% endif %}
+  {% if es_gestion %}
+  <a class="atajo" href="{% url 'flota' %}"><span class="chip"><svg class="icono"><use href="#i-camion"/></svg></span><b>Flota</b><small>Vehículos y gastos</small></a>
+  <a class="atajo" href="{% url 'fondo' %}"><span class="chip"><svg class="icono"><use href="#i-fondo"/></svg></span><b>Fondo de caja</b><small>Recargas y saldo</small></a>
+  <a class="atajo" href="{% url 'reportes' %}"><span class="chip"><svg class="icono"><use href="#i-reporte"/></svg></span><b>Reportes</b><small>Por mes y camión</small></a>
+  {% endif %}
+</nav>
+
+{% if saldo_fondo is not None %}
+<div class="cifras seccion-cifras">
+  <a class="cifra ancha {% if saldo_fondo < 0 %}roja{% endif %}" href="{% url 'fondo' %}">
+    <div class="etiqueta"><svg class="icono"><use href="#i-fondo"/></svg>Saldo del fondo de caja</div>
+    <div class="valor">{{ saldo_fondo|pesos }}</div>
+    <div class="nota">{% if saldo_fondo < 0 %}En descubierto: se entregó más efectivo del que entró.{% else %}Recargas menos anticipos, más sobrantes devueltos.{% endif %}</div>
+  </a>
+  <a class="cifra" href="{% url 'anticipos' %}">
+    <div class="etiqueta"><svg class="icono"><use href="#i-billete"/></svg>Anticipos abiertos</div>
+    <div class="valor">{{ abiertos|length }}</div>
+  </a>
+  {% if es_direccion %}<a class="cifra {% if pendientes %}ambar{% endif %}" href="{% url 'pendientes' %}">{% else %}<div class="cifra {% if pendientes %}ambar{% endif %}">{% endif %}
+    <div class="etiqueta"><svg class="icono"><use href="#i-aprobar"/></svg>Gastos por aprobar</div>
+    <div class="valor">{{ pendientes }}</div>
+  {% if es_direccion %}</a>{% else %}</div>{% endif %}
+  <a class="cifra fila-completa" href="{% url 'reportes' %}">
+    <div class="etiqueta"><svg class="icono"><use href="#i-tendencia"/></svg>Aprobado este mes</div>
+    <div class="valor">{{ aprobado_mes|pesos }}</div>
+  </a>
+</div>
+{% endif %}
+
+<section class="seccion">
+  <h2><svg class="icono"><use href="#i-billete"/></svg>{% if es_gestion %}Anticipos abiertos{% else %}Mis anticipos abiertos{% endif %}</h2>
+  {% include "nucleo/_tabla_anticipos.html" with anticipos=abiertos %}
+</section>
+
+<section class="seccion">
+  <h2><svg class="icono"><use href="#i-llave"/></svg>{% if es_gestion %}Últimos gastos registrados{% else %}Mis últimos gastos{% endif %}</h2>
+  {% include "nucleo/_tabla_gastos.html" with gastos=recientes con_tecnico=es_gestion vacio="Todavía no hay gastos registrados." %}
+</section>
+{% endblock %}

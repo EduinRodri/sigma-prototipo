@@ -1,0 +1,12 @@
+{% extends "nucleo/base.html" %}
+{% block titulo %}Anticipos{% endblock %}
+{% block contenido %}
+<div class="encabezado">
+  <div>
+    <h1>Anticipos</h1>
+    <p class="subtitulo">Efectivo entregado a los técnicos y lo que han legalizado con gastos.</p>
+  </div>
+  {% if puede_entregar %}<a class="boton principal" href="{% url 'anticipo_nuevo' %}"><svg class="icono"><use href="#i-mas"/></svg><span class="texto-fab">Entregar anticipo</span></a>{% endif %}
+</div>
+{% include "nucleo/_tabla_anticipos.html" with barra="nucleo/_barra_anticipos.html" %}
+{% endblock %}

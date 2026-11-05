@@ -1,0 +1,19 @@
+{% extends "nucleo/base.html" %}{% load static %}
+{% block cuerpo %}
+<div class="pagina-error">
+  <header><a class="cliente" href="/">
+    <svg class="logo-cliente" aria-hidden="true"><use href="#logo-garzas"/></svg>
+    <span><strong>Frutera Las Garzas</strong><small>Mantenimiento de flota</small></span>
+  </a></header>
+  <main class="caja-error" id="contenido" tabindex="-1">
+    <p class="codigo">Error {% block codigo %}{% endblock %}</p>
+    <h1>{% block encabezado %}{% endblock %}</h1>
+    <p class="subtitulo">{% block explicacion %}{% endblock %}</p>
+    <div class="acciones">
+      <a class="boton" href="/">Ir al inicio</a>
+      <a class="boton secundario" href="javascript:history.back()">Volver atrás</a>
+    </div>
+  </main>
+  <footer class="producto"><b>SIGMA</b> v0.4 · Gastos de flota</footer>
+</div>
+{% endblock %}

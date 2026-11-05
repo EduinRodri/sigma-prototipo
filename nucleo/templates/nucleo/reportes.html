@@ -1,0 +1,55 @@
+{% extends "nucleo/base.html" %}{% load sigma static %}
+{% block titulo %}Reportes{% endblock %}
+{% block contenido %}
+<div class="encabezado">
+  <div>
+    <h1>Reportes</h1>
+    <p class="subtitulo">Solo cuentan los gastos aprobados: lo pendiente todavía no es un gasto reconocido.</p>
+  </div>
+  <nav class="pestanas" aria-label="Año">
+    {% for a in anios %}<a href="?anio={{ a }}" class="{% if a == anio %}activo{% endif %}">{{ a }}</a>{% endfor %}
+  </nav>
+</div>
+
+<div class="cifras">
+  <div class="cifra">
+    <div class="etiqueta">Total aprobado en {{ anio }}</div>
+    <div class="valor">{{ total|pesos }}</div>
+  </div>
+  <div class="cifra">
+    <div class="etiqueta">Camiones con gastos</div>
+    <div class="valor">{{ por_camion|length }}</div>
+  </div>
+</div>
+
+<div class="columnas apilar-1200 seccion">
+  <div class="panel">
+    <div class="cabeza"><h2>Por mes</h2><span class="ayuda">{{ anio }}</span></div>
+    <div class="barras">
+      {% for fila in por_mes %}
+      <div class="fila">
+        <span>{{ fila.mes|date:"F"|capfirst }}</span>
+        <div class="pista"><div class="relleno" style="width:{% widthratio fila.total max_mes 100 %}%"></div></div>
+        <span class="cuanto">{{ fila.total|pesos }}<small>{{ fila.cantidad }} gasto{{ fila.cantidad|pluralize }}</small></span>
+      </div>
+      {% empty %}
+      <p class="vacio">Sin gastos aprobados en {{ anio }}.</p>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="panel">
+    <div class="cabeza"><h2>Por camión</h2><span class="ayuda">de mayor a menor</span></div>
+    <div class="barras">
+      {% for c in por_camion %}
+      <div class="fila">
+        {% include "nucleo/_vehiculo.html" with camion=c %}
+        <div class="pista"><div class="relleno" style="width:{% widthratio c.total max_camion 100 %}%"></div></div>
+        <span class="cuanto">{{ c.total|pesos }}<small>{{ c.cantidad }} gasto{{ c.cantidad|pluralize }}</small></span>
+      </div>
+      {% empty %}
+      <p class="vacio">Sin gastos aprobados en {{ anio }}.</p>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

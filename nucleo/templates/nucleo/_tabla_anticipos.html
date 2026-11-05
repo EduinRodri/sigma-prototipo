@@ -1,0 +1,24 @@
+{% load sigma %}
+<div class="tabla">
+{% if barra %}{% include barra %}{% endif %}
+<table>
+  <thead>
+    <tr><th>Anticipo</th>{% if es_gestion %}<th>Técnico</th>{% endif %}<th>Entregado</th><th class="num">Días</th><th class="num">Monto</th><th class="num">Disponible</th><th>Estado</th></tr>
+  </thead>
+  <tbody>
+  {% for a in anticipos %}
+    <tr>
+      <td><a class="id" href="{% url 'anticipo' a.pk %}">A-{{ a.pk }}</a>{% if a.descripcion %}<span class="ayuda-celda">{{ a.descripcion|truncatechars:34 }}</span>{% endif %}</td>
+      {% if es_gestion %}<td>{{ a.tecnico.get_full_name|default:a.tecnico.username }}</td>{% endif %}
+      <td>{{ a.fecha_entrega|fecha }}</td>
+      <td class="num">{{ a.dias_abierto }}</td>
+      <td class="num">{{ a.monto|pesos }}</td>
+      <td class="num">{% if a.estado == "ABIERTO" %}<strong>{{ a.disponible|pesos }}</strong>{% else %}—{% endif %}</td>
+      <td><span class="estado estado-{{ a.estado }}">{{ a.get_estado_display }}</span></td>
+    </tr>
+  {% empty %}
+    <tr><td class="vacia" colspan="7"><svg class="vacia-ilustra"><use href="#i-billete"/></svg>{% if q %}<strong>Sin resultados para «{{ q }}»</strong>Prueba con el nombre del técnico, el número del anticipo o una placa.{% else %}<strong>Sin anticipos</strong>No hay anticipos para mostrar.{% endif %}</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>

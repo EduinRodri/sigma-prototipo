@@ -1,0 +1,56 @@
+{% extends "nucleo/base.html" %}{% load sigma %}
+{% block titulo %}Anticipo A-{{ anticipo.pk }}{% endblock %}
+{% block contenido %}
+<nav class="migas"><a href="{% url 'anticipos' %}">Anticipos</a><span>/</span><span>A-{{ anticipo.pk }}</span></nav>
+<div class="encabezado">
+  <div>
+    <h1>Anticipo A-{{ anticipo.pk }} <span class="estado estado-{{ anticipo.estado }}">{{ anticipo.get_estado_display }}</span></h1>
+    <p class="subtitulo">{{ anticipo.tecnico.get_full_name|default:anticipo.tecnico.username }} · {{ anticipo.descripcion|default:"Sin descripción" }}</p>
+  </div>
+  <div class="acciones">
+    {% if puede_cerrar %}
+    <form method="post" action="{% url 'anticipo_cerrar' anticipo.pk %}">
+      {% csrf_token %}<button class="boton secundario" type="submit" data-confirmar="¿Cerrar el anticipo? Ya no se podrán registrar más gastos." data-ok="Cerrar anticipo">Cerrar anticipo</button>
+    </form>
+    {% endif %}
+    {% if puede_registrar %}<a class="boton principal" href="{% url 'gasto_nuevo' anticipo.pk %}"><svg class="icono"><use href="#i-mas"/></svg><span class="texto-fab">Registrar gasto</span></a>{% endif %}
+  </div>
+</div>
+
+<div class="columnas">
+  <div class="panel">
+    <div class="cabeza"><h2>Uso del anticipo</h2><span class="ayuda">de {{ anticipo.monto|pesos }} entregados</span></div>
+    {% with aprobado=anticipo.legalizado pendiente=anticipo.pendiente %}
+    <div class="ayuda">{% if anticipo.estado == "ABIERTO" %}Disponible{% else %}Sobrante devuelto al fondo{% endif %}</div>
+    <div class="cifra-grande">{% if anticipo.estado == "ABIERTO" %}{{ anticipo.disponible|pesos }}{% else %}{{ anticipo.monto_devuelto|pesos }}{% endif %}</div>
+    <div class="consumo">
+      <div class="barra" role="img" aria-label="Aprobado {{ aprobado|pesos }}, pendiente {{ pendiente|pesos }} de {{ anticipo.monto|pesos }}">
+        <span class="aprobado" style="width:{% widthratio aprobado anticipo.monto 100 %}%"></span>
+        <span class="pendiente" style="width:{% widthratio pendiente anticipo.monto 100 %}%"></span>
+      </div>
+      <div class="leyenda">
+        <span><i style="background:var(--marca)"></i>Aprobado <strong>{{ aprobado|pesos }}</strong></span>
+        <span><i style="background:var(--aviso-barra)"></i>Pendiente <strong>{{ pendiente|pesos }}</strong></span>
+        <span><i style="background:#e9ecef;outline:1px solid var(--borde-fuerte)"></i>Libre <strong>{% if anticipo.estado == "ABIERTO" %}{{ anticipo.disponible|pesos }}{% else %}{{ anticipo.monto_devuelto|pesos }}{% endif %}</strong></span>
+      </div>
+      <p class="ayuda" style="margin:10px 0 0">Lo pendiente ya se descuenta, para que dos gastos registrados a la vez no superen el anticipo.</p>
+    </div>
+    {% endwith %}
+  </div>
+
+  <div class="panel">
+    <div class="cabeza"><h2>Datos</h2></div>
+    <dl class="datos">
+      <dt>Técnico</dt><dd>{{ anticipo.tecnico.get_full_name|default:anticipo.tecnico.username }}</dd>
+      <dt>Entregado</dt><dd>{{ anticipo.fecha_entrega|fecha }} <span class="ayuda">por {{ anticipo.entregado_por.get_full_name|default:anticipo.entregado_por.username }}</span></dd>
+      <dt>{% if anticipo.estado == "ABIERTO" %}Días abierto{% else %}Duró{% endif %}</dt><dd>{{ anticipo.dias_abierto }} día{{ anticipo.dias_abierto|pluralize }}</dd>
+      {% if anticipo.cerrado_en %}<dt>Cerrado</dt><dd>{{ anticipo.cerrado_en|fechahora }} <span class="ayuda">por {{ anticipo.cerrado_por.get_full_name|default:anticipo.cerrado_por.username }}</span></dd>{% endif %}
+    </dl>
+  </div>
+</div>
+
+<section class="seccion">
+  <h2>Gastos del anticipo</h2>
+  {% include "nucleo/_tabla_gastos.html" with en_anticipo=True vacio="Este anticipo todavía no tiene gastos." %}
+</section>
+{% endblock %}
