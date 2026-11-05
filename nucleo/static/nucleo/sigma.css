@@ -37,11 +37,11 @@
 }
 
 * { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; font-size: 100%; }
 body {
   margin: 0;
   font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  font-size: 14px;
+  font-size: .875rem;
   line-height: 1.45;
   background: var(--fondo);
   color: var(--texto);
@@ -206,7 +206,7 @@ h1 .estado { font-size: .8rem; font-weight: 500; border: 1px solid var(--borde);
 form.formulario { display: grid; gap: 14px; }
 form.formulario > div:not(.acciones) { display: grid; gap: 4px; }
 form.formulario label { font-weight: 500; font-size: .82rem; color: var(--texto); }
-.rejilla-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.rejilla-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr)); gap: 14px; }
 input[type=text], input[type=search], input[type=number], input[type=date], input[type=password], input[type=file], select, textarea {
   width: 100%; padding: 7px 10px; border: 1px solid var(--borde-fuerte); border-radius: var(--r); font: inherit; background: var(--campo); color: var(--texto);
 }
@@ -238,7 +238,7 @@ dl.datos dd { margin: 0; }
 .archivo:hover { border-color: var(--borde-fuerte); text-decoration: none; }
 
 .columnas { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 16px; align-items: start; }
-@media (max-width: 1200px) { .columnas.apilar-1200 { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 75em) { .columnas.apilar-1200 { grid-template-columns: minmax(0, 1fr); } }
 
 /* Rastro del gasto */
 .linea { list-style: none; margin: 0; padding: 0; }
@@ -298,14 +298,14 @@ dl.datos dd { margin: 0; }
 .ver-clave .icono { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .aviso-demo summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; font-weight: 600; color: var(--suave); }
 .aviso-demo p { margin: 0 0 8px; }
-.usuarios-demo { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.usuarios-demo { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr)); gap: 8px; }
 .usuarios-demo button { display: block; min-height: 44px; padding: 6px 10px; text-align: left; background: var(--superficie); color: var(--texto); border: 1px solid var(--borde-fuerte); border-radius: var(--r); cursor: pointer; font: inherit; }
 .usuarios-demo button:hover { border-color: var(--marca); }
 .usuarios-demo b { display: block; font-size: .85rem; }
 .usuarios-demo small { display: block; font-size: .72rem; color: var(--suave); }
 
 /* ─── Flota ─────────────────────────────────────────────────────────────── */
-.persona { display: inline-flex; align-items: center; gap: 8px; }
+.persona { display: inline-flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; }
 .avatar.chico { width: 24px; height: 24px; font-size: .64rem; }
 img.avatar { object-fit: cover; background: var(--avatar-fondo); }
 a.vehiculo { color: var(--texto); }
@@ -318,7 +318,7 @@ a.vehiculo:hover b { color: var(--marca); text-decoration: underline; }
 .cabecera-vehiculo h1 { margin-top: 4px; }
 dl.datos.compactos { grid-template-columns: 130px 1fr; margin-top: 14px; }
 .barras.compactas .fila { grid-template-columns: 96px 1fr 92px; }
-@media (max-width: 600px) {
+@media (max-width: 37.5em) {
   .cabecera-vehiculo { flex-direction: column; gap: 12px; }
   .cabecera-vehiculo > img { width: 100%; height: auto; aspect-ratio: 3 / 2; }
   .barras.compactas .fila { grid-template-columns: 96px 1fr; }
@@ -412,8 +412,8 @@ a.vehiculo:hover img { transform: scale(1.06); }
 /* ═══ Móvil / tableta (≤ 900 px): barra inferior, tarjetas, botones grandes ══ */
 .mas-boton { display: none; }
 .menu-gestion { display: none; }
-@media (max-width: 900px) {
-  body { padding-bottom: calc(68px + env(safe-area-inset-bottom)); font-size: 15px; }
+@media (max-width: 56.25em) {
+  body { padding-bottom: calc(68px + env(safe-area-inset-bottom)); font-size: .9375rem; }
   .app { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto; }
   .contenido { grid-column: 1; }
   .lateral { grid-row: auto; grid-column: 1; position: sticky; top: 0; z-index: 20; height: auto; border: 0; background: var(--marca-fondo); }
@@ -453,14 +453,14 @@ a.vehiculo:hover img { transform: scale(1.06); }
   .columnas { grid-template-columns: 1fr; }
   .encabezado > .boton { width: 100%; }
   .boton { height: 44px; padding: 0 18px; }
-  input[type=text], input[type=search], input[type=number], input[type=date], input[type=password], input[type=file], select, textarea { font-size: 16px; min-height: 44px; }
+  input[type=text], input[type=search], input[type=number], input[type=date], input[type=password], input[type=file], select, textarea { font-size: 1rem; min-height: 44px; }
   .formulario .acciones { flex-direction: column-reverse; align-items: stretch; }
   .formulario .acciones .boton { width: 100%; }
   input[type=file] { padding: 10px; border-style: dashed; border-width: 2px; background: var(--marca-claro); }
   input[type=file]::file-selector-button { padding: 10px 14px; background: var(--marca-fondo); color: #fff; border-color: var(--marca-texto); }
   .pestanas a { padding: 8px 12px; }
   .barra-tabla { padding: 10px; }
-  .barra-tabla select, .buscador input[type=search] { height: 40px; font-size: 16px; }
+  .barra-tabla select, .buscador input[type=search] { height: 40px; font-size: 1rem; }
 
   /* Tablas → tarjetas */
   .tabla { background: none; border: 0; box-shadow: none; overflow: visible; }
@@ -497,7 +497,7 @@ a.vehiculo:hover img { transform: scale(1.06); }
   .ingreso .formulario-ingreso { padding: 28px 20px; }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 37.5em) {
   h1 { font-size: 1.3rem; }
   .cifras { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .cifra { border-left: 0; border-top: 1px solid var(--borde); }
@@ -562,7 +562,7 @@ h2 .icono, .panel .cabeza h2 .icono { width: 18px; height: 18px; vertical-align:
 .ingreso .caja h1 { font-size: 1.6rem; }
 
 /* Barra lateral en verde profundo (escritorio) */
-@media (min-width: 901px) {
+@media (min-width: 56.3125em) {
   .lateral { background: var(--marca-oscuro) url("img/patron-hojas.svg") 0 100% / 160px; border-right: 0; }
   .lateral .cliente { border-bottom-color: rgba(255, 255, 255, .12); color: #fff; }
   .lateral .cliente strong { color: #fff; }
@@ -579,7 +579,7 @@ h2 .icono, .panel .cabeza h2 .icono { width: 18px; height: 18px; vertical-align:
   .lateral .menu .contador { background: var(--aviso-barra); color: #2a2208; }
   .superior { box-shadow: 0 1px 0 var(--borde); }
 }
-@media (max-width: 900px) {
+@media (max-width: 56.25em) {
   .bienvenida { padding: 18px; min-height: 120px; }
   .bienvenida h1 { font-size: 1.4rem; }
   .bienvenida::after { width: 100%; opacity: .55; }
@@ -630,7 +630,7 @@ dialog.confirmar p { margin: 0 0 18px; color: var(--suave); }
 dialog.confirmar .acciones { justify-content: flex-end; }
 .tabla tbody tr.tocable { cursor: pointer; }
 
-@media (max-width: 900px) {
+@media (max-width: 56.25em) {
   .migas.con-atras > :not(.atras) { display: none; }
   .migas .atras { display: inline-flex; align-items: center; gap: 4px; min-height: 40px; font-weight: 600; color: var(--marca); }
   .migas .atras::before { content: ""; width: 9px; height: 9px; border-left: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(45deg); margin-right: 4px; }
@@ -670,14 +670,14 @@ dialog.confirmar .acciones { justify-content: flex-end; }
 }
 
 /* Blancos táctiles de 44 px como mínimo (Apple HIG 44 pt, Material 48 dp, WCAG 2.5.5) */
-@media (max-width: 900px) {
+@media (max-width: 56.25em) {
   .buscar-movil { width: 44px; height: 44px; }
   .usuario button { width: 44px; height: 44px; place-items: center; padding: 0; }
   .tabla td:first-child a.id { display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; }
   .tabla td:first-child { padding-bottom: 0; }
   .migas a { padding: 8px 0; }
 }
-@media (max-width: 900px) {
+@media (max-width: 56.25em) {
   .bienvenida::after { height: 70%; opacity: .4; }
 }
 
@@ -728,7 +728,7 @@ dialog.confirmar .acciones { justify-content: flex-end; }
 :root[data-tema="oscuro"] .tema .sol { display: none; }
 :root[data-tema="oscuro"] .tema .luna { display: block; }
 @media (prefers-color-scheme: dark) { :root:not([data-tema="claro"]) .tema .sol { display: none; } :root:not([data-tema="claro"]) .tema .luna { display: block; } }
-@media (max-width: 900px) { .tema { color: #fff; width: 44px; height: 44px; place-items: center; padding: 0; } }
+@media (max-width: 56.25em) { .tema { color: #fff; width: 44px; height: 44px; place-items: center; padding: 0; } }
 
 /* Navegación: saltar al contenido, atajo de teclado y foco visible */
 .saltar { position: fixed; left: 12px; top: -60px; z-index: 200; background: var(--marca-fondo); color: #fff; padding: 10px 16px; border-radius: var(--r); font-weight: 600; transition: top .15s; }
@@ -737,10 +737,10 @@ main:focus { outline: none; }
 .buscador { position: relative; }
 .atajo-tecla { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); font: 600 .72rem "Inter", sans-serif; color: var(--tenue); border: 1px solid var(--borde-fuerte); border-radius: 4px; padding: 0 6px; line-height: 1.5; background: var(--superficie); pointer-events: none; }
 .buscador input:focus + .atajo-tecla { display: none; }
-@media (max-width: 900px) { .atajo-tecla { display: none; } }
+@media (max-width: 56.25em) { .atajo-tecla { display: none; } }
 
 /* Auditoría táctil (celular): todo enlace o botón mide al menos 44 px de alto */
-@media (max-width: 900px) {
+@media (max-width: 56.25em) {
   a.vehiculo { min-height: 44px; }
   .pestanas a { min-height: 44px; display: inline-flex; align-items: center; }
   .migas .atras { min-height: 44px; }
@@ -764,27 +764,27 @@ main:focus { outline: none; }
 .hace { display: block; color: var(--suave); font-weight: 400; font-size: .74rem; }
 .equivale { color: var(--suave); font-size: .8rem; font-variant-numeric: tabular-nums; min-height: 1em; }
 .equivale.excede { color: var(--alerta); font-weight: 600; }
-@media (max-width: 900px) {
+@media (max-width: 56.25em) {
   .columnas > .lado { order: -1; }
   .alerta-fila { flex-wrap: wrap; }
   .alerta-fila b { width: 100%; }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 56.25em) {
   .formulario .acciones { flex-direction: row-reverse; align-items: stretch; flex-wrap: nowrap; }
   .formulario .acciones .boton { width: auto; flex: 1; }
   .formulario .acciones .boton.secundario { flex: 0 0 auto; }
 }
-@media (max-width: 900px) { a.id { min-width: 44px; } }
+@media (max-width: 56.25em) { a.id { min-width: 44px; } }
 /* Enlaces dentro de texto: no dependen solo del color (WCAG 1.4.1) */
 .pendiente-item .meta a, .ayuda a, .subtitulo a, td.ajustar a { text-decoration: underline; text-underline-offset: 2px; }
-@media (max-width: 900px) { .migas .atras { min-width: 64px; } }
-@media (max-width: 900px) {
+@media (max-width: 56.25em) { .migas .atras { min-width: 64px; } }
+@media (max-width: 56.25em) {
   .app { align-content: start; }
   .lateral { align-self: start; }
 }
 /* Tableta: las tarjetas van en dos columnas */
-@media (min-width: 601px) and (max-width: 900px) {
+@media (min-width: 37.5625em) and (max-width: 56.25em) {
   .tabla tbody { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; align-items: start; }
   .tabla tbody tr { margin-bottom: 0; }
   .tabla tbody tr:has(td.vacia) { grid-column: 1 / -1; }
@@ -822,7 +822,7 @@ main:focus { outline: none; }
 .guia-tabla th { width: 150px; vertical-align: top; background: none; font-size: .85rem; color: var(--texto); white-space: normal; }
 .guia-tabla td { white-space: normal; }
 .guia code { background: var(--superficie-2); border: 1px solid var(--borde); border-radius: 4px; padding: 0 5px; font-size: .82em; }
-@media (max-width: 900px) {
+@media (max-width: 56.25em) {
   .guia-fila { flex-direction: column; align-items: flex-start; gap: 6px; }
   .guia-fila > :first-child { flex: none; }
   .guia-indice { overflow-x: auto; flex-wrap: nowrap; scrollbar-width: none; }
@@ -832,14 +832,14 @@ main:focus { outline: none; }
 }
 
 .pie a { text-decoration: underline; text-underline-offset: 2px; }
-@media (max-width: 900px) {
+@media (max-width: 56.25em) {
   .lateral .cliente { padding-right: 190px; }
   .lateral .cliente > span { min-width: 0; }
   .lateral .cliente strong { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: .98rem; }
   .lateral .cliente small { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .pie a { display: inline-flex; align-items: center; min-height: 44px; }
 }
-@media (max-width: 900px) {
+@media (max-width: 56.25em) {
   .lateral .cliente { padding-right: 208px; gap: 8px; }
   .app:has(.menu-gestion) .buscar-movil { display: none; }
   .lateral .cliente strong { font-size: .88rem; }
@@ -847,17 +847,17 @@ main:focus { outline: none; }
 }
 
 /* Flota: la descripción puede partirse en dos líneas para que la tabla quepa en pantallas de 1000–1200 px */
-@media (min-width: 901px) {
+@media (min-width: 56.3125em) {
   .tabla-flota td:nth-child(2) { white-space: normal; min-width: 150px; }
   .tabla-flota th, .tabla-flota td { padding-left: 10px; padding-right: 10px; }
 }
-@media (min-width: 901px) and (max-width: 1280px) {
+@media (min-width: 56.3125em) and (max-width: 80em) {
   .tabla-flota td:nth-child(n+3):not(.num) { white-space: normal; }
   .tabla-flota th { white-space: normal; }
 }
 
 /* Ingreso en celular: la foto de la flota ocupa toda la pantalla y el formulario sube como una hoja desde abajo */
-@media (max-width: 600px) and (orientation: portrait) {
+@media (max-width: 37.5em) and (orientation: portrait) {
   .ingreso { display: block; position: relative; min-height: 100vh; min-height: 100svh; background: var(--fondo); overflow: hidden; }
   .ingreso .foto-flota { position: absolute; inset: 0; min-height: 0; padding: 20px 20px 0; z-index: 0; }
   .ingreso .foto-flota::before { background: linear-gradient(180deg, rgba(8, 20, 12, .62), rgba(8, 20, 12, .12) 38%, rgba(8, 20, 12, .35) 100%); }
@@ -874,12 +874,12 @@ main:focus { outline: none; }
   .ingreso .producto { margin-top: 18px; }
 }
 /* El tema oscuro (reglas de más arriba) pinta el formulario de ingreso y tapaba la foto: aquí vuelve a ser transparente. */
-@media (max-width: 600px) and (orientation: portrait) {
+@media (max-width: 37.5em) and (orientation: portrait) {
   :root:not([data-tema="claro"]) .ingreso .formulario-ingreso,
   :root[data-tema="oscuro"] .ingreso .formulario-ingreso { background: none; }
 }
 /* Desde 601 px y con el teléfono girado: diseño partido como en PC (foto horizontal a la izquierda, formulario a la derecha). */
-@media (max-width: 900px) and (min-width: 601px), (max-width: 600px) and (orientation: landscape) {
+@media (max-width: 56.25em) and (min-width: 37.5625em), (max-width: 37.5em) and (orientation: landscape) {
   .ingreso { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(300px, 1fr); min-height: 100vh; min-height: 100svh; }
   .ingreso .foto-flota { position: relative; inset: auto; z-index: auto; min-height: 100svh; padding: 20px 24px; justify-content: space-between; }
   .ingreso .foto-flota::before { background: linear-gradient(180deg, rgba(8, 20, 12, .55), rgba(8, 20, 12, .1) 45%, rgba(8, 20, 12, .6)); }
@@ -891,21 +891,21 @@ main:focus { outline: none; }
   .ingreso .caja .cliente-tarjeta { display: none; }
   .ingreso .formulario-ingreso, :root:not([data-tema="claro"]) .ingreso .formulario-ingreso, :root[data-tema="oscuro"] .ingreso .formulario-ingreso { position: static; min-height: 100svh; justify-content: center; padding: 16px 28px; background: var(--fondo) url("img/patron-hojas.svg"); }
   .ingreso .formulario-ingreso .caja { max-width: 340px; width: 100%; margin: 0 auto; padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; animation: none; }
-  @media (max-width: 600px) { .ingreso .foto-flota p { display: none; } }
+  @media (max-width: 37.5em) { .ingreso .foto-flota p { display: none; } }
   .ingreso .caja .producto { display: none; }
   .ingreso .caja h1 { font-size: 1.3rem; }
   .ingreso .caja .formulario { gap: 8px; margin-top: 8px; }
 }
 }
-@media (min-width: 601px) and (max-width: 900px) {
+@media (min-width: 37.5625em) and (max-width: 56.25em) {
   .ingreso .caja { max-width: 520px; margin: 0 auto; border-radius: 22px 22px 0 0; }
 }
-@media (max-width: 900px) { .ingreso .caja .boton { height: 48px; font-size: 1rem; } }
+@media (max-width: 56.25em) { .ingreso .caja .boton { height: 48px; font-size: 1rem; } }
 
 /* ═══ Auditoría 21 oct: campo/valor, cifras, gastos compactos, FAB ═══════════════ */
 /* Campo/valor unificado: etiqueta pequeña a la izquierda, valor a la derecha (igual que las tarjetas de las listas). */
 dl.datos dt { font-size: .82rem; }
-@media (max-width: 600px) {
+@media (max-width: 37.5em) {
   dl.datos, dl.datos.compactos { grid-template-columns: minmax(84px, auto) minmax(0, 1fr); gap: 10px 14px; }
   dl.datos dt { font-size: .76rem; font-weight: 500; color: var(--tenue); padding-top: 2px; }
   dl.datos dd { margin: 0; text-align: right; }
@@ -915,7 +915,7 @@ dl.datos dt { font-size: .82rem; }
 .leyenda i { outline: 1px solid var(--borde-fuerte); }
 
 /* Gastos en celular: tarjeta compacta de cuatro líneas en vez de seis filas etiqueta/valor */
-@media (max-width: 900px) {
+@media (max-width: 56.25em) {
   .tabla-gastos tbody tr:not(:has(.vacia)) { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 12px; row-gap: 2px; padding: 10px 14px; }
   .tabla-gastos td { padding: 0; min-height: 0; }
   .tabla-gastos td::before { display: none; }
@@ -931,7 +931,7 @@ dl.datos dt { font-size: .82rem; }
 }
 
 /* Botón flotante: al bajar se encoge a solo el icono para no tapar cifras ni filas */
-@media (max-width: 900px) {
+@media (max-width: 56.25em) {
   .boton.principal { transition: padding .2s, gap .2s, box-shadow .2s; }
   .boton.principal.compacto { width: 52px !important; padding: 0; gap: 0; }
   .boton.principal.compacto .texto-fab { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
@@ -939,22 +939,22 @@ dl.datos dt { font-size: .82rem; }
 .texto-fab { white-space: nowrap; }
 
 /* WCAG 2.4.11 (foco no oculto, técnica C43): al llegar con el teclado, el campo no queda bajo la cabecera, la barra inferior ni el botón flotante */
-@media (max-width: 900px) { html { scroll-padding-top: 64px; scroll-padding-bottom: 150px; } }
+@media (max-width: 56.25em) { html { scroll-padding-top: 64px; scroll-padding-bottom: 150px; } }
 
 /* Teléfonos angostos: el nombre de la empresa cabe entero en dos líneas, sin puntos suspensivos. */
-@media (max-width: 430px) {
+@media (max-width: 26.875em) {
   .lateral .cliente small { display: none; }
   .lateral .cliente { padding-right: 176px; }
   .lateral .cliente strong { white-space: normal; overflow: visible; text-overflow: clip; font-size: .84rem; line-height: 1.12; }
 }
-@media (max-width: 360px) { .lateral .cliente strong { font-size: .78rem; } }
+@media (max-width: 22.5em) { .lateral .cliente strong { font-size: .78rem; } }
 /* Pantallas bajas: la barra de acciones no tapa los campos del formulario. */
-@media (max-width: 900px) and (max-height: 640px) {
+@media (max-width: 56.25em) and (max-height: 40em) {
   .panel > form.formulario > .acciones { position: static; margin: 6px 0 0; padding: 0; background: none; }
 }
 
 /* Teléfono girado: la altura es escasa, así que las barras fijas ceden espacio al contenido. */
-@media (max-width: 932px) and (max-height: 500px) {
+@media (max-width: 58.25em) and (max-height: 31.25em) {
   body { padding-bottom: calc(50px + env(safe-area-inset-bottom)); }
   .menu { height: calc(50px + env(safe-area-inset-bottom)); }
   .menu > a, .menu .mas-boton { flex-direction: row; gap: 6px; padding: 2px; margin: 3px 2px; }
@@ -966,7 +966,77 @@ dl.datos dt { font-size: .82rem; }
 }
 
 /* Por aprobar: los enlaces de cada gasto se pueden tocar con holgura en pantallas táctiles. */
-@media (max-width: 900px) {
+@media (max-width: 56.25em) {
   .pendiente-item .meta a { display: inline-flex; align-items: center; min-height: 24px; }
   .pendiente-item a.id { display: inline-flex; align-items: center; min-height: 24px; }
 }
+
+/* Ingreso en teléfono vertical: la foto ocupa solo el espacio libre sobre la hoja, así el camión nunca queda tapado. */
+@media (max-width: 37.5em) and (orientation: portrait) {
+  .ingreso { display: flex; flex-direction: column; overflow: visible; }
+  .ingreso .foto-flota { position: relative; inset: auto; flex: 1 1 auto; min-height: 170px; padding: 0; }
+  .ingreso .foto-flota::before { background: linear-gradient(180deg, rgba(8, 20, 12, .18), rgba(8, 20, 12, 0) 40%, rgba(8, 20, 12, .3)); }
+  .carrusel .diapositiva.solo-celular { background-size: cover; background-position: center 50%; }
+  .carrusel .diapositiva.solo-celular::before, .carrusel .diapositiva.solo-celular::after { display: none; }
+  .ingreso .formulario-ingreso { flex: none; min-height: 0; margin-top: -22px; padding: 0; }
+  .ingreso .caja { margin: 0; border-radius: 22px 22px 0 0; padding: 22px 20px calc(16px + env(safe-area-inset-bottom)); box-shadow: 0 -8px 30px rgba(8, 20, 12, .28); }
+}
+/* Teléfono vertical bajo (o con zoom): la franja de foto es ancha, así que se usan las fotos horizontales. */
+@media (max-width: 37.5em) and (orientation: portrait) and (max-height: 45em) {
+  .carrusel .diapositiva.solo-celular { display: none; }
+  .carrusel .diapositiva.solo-pc { display: block; background-position: center 55%; }
+}
+/* Ventana muy pequeña o zoom de 400 %: el formulario va primero y la foto se oculta para que nada se comprima. */
+@media (max-width: 35em) and (orientation: landscape), (max-height: 18.75em) {
+  .ingreso { display: block; }
+  .ingreso .foto-flota { display: none; }
+  .ingreso .formulario-ingreso, :root:not([data-tema="claro"]) .ingreso .formulario-ingreso, :root[data-tema="oscuro"] .ingreso .formulario-ingreso { min-height: 100svh; padding: 16px; }
+  .ingreso .caja .cliente-tarjeta { display: flex; }
+}
+/* Medios siempre dentro de su caja, con cualquier zoom o tamaño de letra. */
+img, svg, video { max-width: 100%; }
+
+/* Base fluida: ningún hijo de grid o flex obliga a la página a crecer, con cualquier ancho, zoom o letra. */
+:where(body *) { min-width: 0; }
+body { overflow-wrap: break-word; }
+input, select, textarea, button { max-width: 100%; }
+select { text-overflow: ellipsis; }
+form.formulario > div:not(.acciones), .rejilla-2 > * { grid-template-columns: minmax(0, 1fr); }
+.acciones { flex-wrap: wrap; }
+/* El nombre de la empresa es un logotipo y las etiquetas de la barra son de navegación: tienen un tope para que quepan siempre. */
+@media (max-width: 56.25em) {
+  .lateral .cliente strong { font-size: min(.98rem, 17px); }
+  .lateral .cliente small { font-size: min(.72rem, 12px); }
+  .menu > a, .menu .mas-boton { font-size: min(.68rem, 13px); line-height: 1.15; text-align: center; }
+  .menu { height: auto; min-height: calc(64px + env(safe-area-inset-bottom)); }
+}
+@media (max-width: 26.875em) {
+  .lateral .cliente strong { font-size: min(.84rem, 14px); }
+}
+@media (max-width: 22.5em) {
+  .lateral .cliente strong { font-size: min(.78rem, 13px); }
+}
+
+/* Letra muy grande: el texto largo se parte antes de empujar la página, y los controles nunca exceden su caja. */
+
+code, .archivo { overflow-wrap: anywhere; word-break: break-word; }
+.archivo { max-width: 100%; white-space: normal; }
+form.formulario input, form.formulario select, form.formulario textarea { width: 100%; box-sizing: border-box; }
+form.formulario input[type=checkbox], form.formulario input[type=radio] { width: auto; }
+.boton.principal { max-width: calc(100vw - 32px); }
+.texto-fab { white-space: normal; }
+.cabecera-vehiculo { flex-wrap: wrap; }
+.cabecera-vehiculo > :not(img) { flex: 1 1 16rem; }
+dl.datos, dl.datos > * { min-width: 0; }
+.muestra { min-width: 0; max-width: 100%; }
+
+/* El ingreso no tiene barra inferior: no reserva su espacio. */
+body:has(.ingreso) { padding-bottom: 0; }
+
+/* Filas con desplazamiento horizontal: sus elementos conservan su ancho natural. */
+.pestanas > *, .guia-indice > * { flex: none; }
+/* Reportes: la placa nunca se parte. */
+.barras .fila { grid-template-columns: minmax(7.5rem, 180px) minmax(0, 1fr) auto; }
+.barras.compactas .fila { grid-template-columns: minmax(7.5rem, 8rem) minmax(0, 1fr) auto; }
+@media (max-width: 37.5em) { .barras.compactas .fila { grid-template-columns: minmax(7.5rem, 8rem) minmax(0, 1fr); } }
+.vehiculo strong, .vehiculo b, a.id { white-space: nowrap; }

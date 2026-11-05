@@ -1,7 +1,7 @@
 {% extends "nucleo/base.html" %}{% load static sigma %}
 {% block titulo %}Ingresar{% endblock %}
 {% block cabeza %}<style>@view-transition { navigation: none; }</style>
-{% fotos_ingreso as fotos %}<link rel="preload" as="image" fetchpriority="high" href="{% static fotos.0 %}" media="(max-width: 900px)">{% endblock %}
+{% fotos_ingreso as fotos %}<link rel="preload" as="image" fetchpriority="high" href="{% static fotos.0 %}" media="(max-width: 56.25em)">{% endblock %}
 {% block cuerpo %}
 <div class="ingreso">
   <header class="foto-flota">

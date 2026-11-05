@@ -56,36 +56,54 @@
   #user-tools .salir-form { display: inline; }
   #user-tools .salir-form button { background: none; border: 0; color: #fff; font: inherit; text-transform: inherit; letter-spacing: inherit; cursor: pointer; }
 
-  /* Celular y tableta: cabecera de una línea, sin barra lateral y listas como tarjetas */
-  @media (max-width: 767px) {
-    #header { display: flex; flex-flow: row nowrap; justify-content: space-between; gap: 10px; padding: 8px 14px; min-height: 52px; }
-    #branding { flex: 1 1 auto; min-width: 0; }
-    #site-name, #site-name a { font-size: .92rem; line-height: 1.15; margin: 0; }
+  /* Celular y tableta: cabecera compacta, sin barra lateral y listas como tarjetas */
+  .module th, .module td, .module caption { word-break: normal; overflow-wrap: normal; hyphens: none; }
+  .paginator { overflow: visible; height: auto; line-height: 1.5; }
+  :root { --object-tools-bg: #2f6b3a; --object-tools-hover-bg: #24552d; }
+  @media (max-width: 47.9375em) {
+
+    #container, #main, .main, .content, #content, #content-main, .colM, form, fieldset, .module, .form-row, .flex-container, .fieldBox { min-width: 0 !important; max-width: 100% !important; box-sizing: border-box; }
+    #main { display: block; }
+    #header { display: flex !important; flex-flow: row wrap !important; height: auto !important; width: auto !important; gap: 0 10px; padding: 8px 14px; align-items: center; }
+    #branding { flex: 1 1 100%; min-width: 0; margin: 0; }
+    #site-name, #site-name a { font-size: 1rem; line-height: 1.2; margin: 0; }
     #site-name img { width: 30px; height: 30px; flex: none; }
-    #user-tools { flex: none; margin: 0; padding: 0; font-size: .74rem; text-align: right; white-space: nowrap; }
+    #user-tools { position: static; flex: 1 1 100%; width: 100%; max-width: 100%; box-sizing: border-box; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; margin: 2px 0 0; padding: 0; font-size: .8rem; color: #fff; text-align: left; white-space: nowrap; }
     #user-tools .solo-pc, #user-tools .separador { display: none; }
-    #user-tools a, #user-tools button:not(.theme-toggle) { min-height: 44px; display: inline-flex; align-items: center; padding: 0 6px; border: 0; }
-    div.breadcrumbs { padding: 4px 14px; font-size: .8rem; }
+    #user-tools a, #user-tools button:not(.theme-toggle) { min-height: 44px; display: inline-flex; align-items: center; padding: 0 4px; border: 0; color: #fff; }
+    div.breadcrumbs { padding: 2px 14px; font-size: .8rem; }
     #toggle-nav-sidebar, #nav-sidebar { display: none !important; }
     .main > .content, #content { padding: 14px; width: auto; }
     #content h1, #content > h1 { font-size: 1.3rem; margin: 2px 0 10px; }
-    .object-tools { margin: 0 0 12px; float: none; }
-    .object-tools a { display: flex; justify-content: center; min-height: 44px; align-items: center; color: #fff; }
+    .object-tools { margin: 0 0 12px; padding: 0; float: none; display: block; }
+    .object-tools li { display: block; float: none; margin: 0; height: auto; }
+    .object-tools a, .object-tools a.addlink { display: flex; justify-content: center; align-items: center; min-height: 44px; width: 100%; box-sizing: border-box; padding: 0 12px; color: #fff; background-image: none; }
+    .object-tools a::after, .object-tools a.addlink::after { display: none; }
     #changelist .changelist-form-container { display: block; }
     #changelist-filter { display: none; }
     #changelist table, #changelist tbody, #changelist tr, #changelist td, #changelist th { display: block; width: auto; }
     #changelist thead { display: none; }
-    #changelist tbody tr { padding: 12px 14px; border-bottom: 1px solid #e2dfd3; background: #fff; }
+    #changelist tbody tr { padding: 12px 14px; border-bottom: 1px solid #e2e0d3; background: #fff; }
     #changelist tbody th, #changelist tbody td { padding: 2px 0; border: 0; font-size: .92rem; }
     #changelist tbody th a { font-weight: 600; font-size: 1rem; display: inline-flex; min-height: 28px; align-items: center; }
     .paginator { padding: 10px 14px; }
     #changelist-search { padding: 10px; }
-    #changelist-search input[type=text] { width: 60%; }
-    .form-row { padding: 12px 14px; }
-    fieldset.module input[type=text], fieldset.module select, fieldset.module textarea { width: 100%; box-sizing: border-box; }
-    .submit-row { display: grid; gap: 8px; padding: 12px; }
+    #changelist-search div { display: flex; gap: 8px; align-items: center; }
+    #changelist-search input[type=text] { flex: 1 1 auto; min-width: 0; width: auto; }
+    .dashboard .module table, .dashboard .module tbody { display: block; width: 100%; }
+    .dashboard .module tr { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 6px; align-items: center; padding: 6px 10px; border-bottom: 1px solid #eeece2; }
+    .dashboard .module th, .dashboard .module td { display: block; padding: 2px 0; border: 0; white-space: normal; font-size: .9rem; }
+    .dashboard .module th a, .dashboard .module td a { display: inline-flex; min-height: 32px; align-items: center; }
+    fieldset.module { padding: 0; margin: 0 0 12px; width: 100%; box-sizing: border-box; }
+    fieldset.module .form-row { padding: 12px 14px !important; overflow: visible; box-sizing: border-box; width: 100%; }
+    .form-row > div, .fieldBox { width: 100%; box-sizing: border-box; padding: 0; margin: 0; }
+    .dashboard .module caption { display: block; width: 100%; box-sizing: border-box; }
+    .aligned label, fieldset.aligned label { float: none; display: block; width: auto; padding: 0 0 4px; }
+    .flex-container { display: block; }
+    fieldset.module input[type=text], fieldset.module input[type=number], fieldset.module select, fieldset.module textarea { width: 100% !important; max-width: 100%; box-sizing: border-box; font-size: 1rem; }
+    .submit-row { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; padding: 12px; }
     .submit-row input { width: 100%; min-height: 44px; margin: 0 !important; }
-    #content-related { margin: 12px 0 0; }
+    #content-related { margin: 12px 0 0; width: auto; float: none; }
   }
 </style>
 {% endblock %}
