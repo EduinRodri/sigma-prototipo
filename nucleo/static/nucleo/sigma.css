@@ -1040,3 +1040,14 @@ body:has(.ingreso) { padding-bottom: 0; }
 .barras.compactas .fila { grid-template-columns: minmax(7.5rem, 8rem) minmax(0, 1fr) auto; }
 @media (max-width: 37.5em) { .barras.compactas .fila { grid-template-columns: minmax(7.5rem, 8rem) minmax(0, 1fr); } }
 .vehiculo strong, .vehiculo b, a.id { white-space: nowrap; }
+
+/* Un padre con transform convierte al botón flotante en hijo suyo y lo pinta arriba mientras dura la animación.
+   La sección que lo contiene entra solo con opacidad, que no cambia su posición. */
+@keyframes aparece { from { opacity: 0; } }
+main > :has(.boton.principal) { animation-name: aparece; }
+
+/* Al ocultarse la barra del navegador la pantalla crece: la página y lo que asoma debajo igualan a la hoja, sin franja. */
+@media (max-width: 37.5em) and (orientation: portrait) {
+  html:has(.ingreso), body:has(.ingreso) { background: var(--superficie); overscroll-behavior-y: none; }
+  .ingreso { min-height: 100vh; min-height: 100dvh; }
+}
