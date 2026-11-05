@@ -1108,3 +1108,8 @@ html, body { overflow-x: clip; }
   :root:not([data-tema="claro"]) .boton:not(.secundario):not(.peligro):not(.principal):not(.ok):hover { background: #3b8049; border-color: #7cc58a; }
 }
 :root[data-tema="oscuro"] .boton:not(.secundario):not(.peligro):not(.principal):not(.ok):hover { background: #3b8049; border-color: #7cc58a; }
+
+/* Guía de diseño: las rejillas nunca piden más ancho que la pantalla. */
+.guia-rejilla { grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); }
+.muestras { grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); }
+.guia-tabla th { width: auto; }
