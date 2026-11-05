@@ -1113,3 +1113,34 @@ html, body { overflow-x: clip; }
 .guia-rejilla { grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); }
 .muestras { grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); }
 .guia-tabla th { width: auto; }
+
+/* Cifras: el tamaño depende del ancho real de su tarjeta, así un valor grande nunca se sale, con cualquier zoom o letra. */
+.cifra { container-type: inline-size; }
+.cifra .valor { font-size: min(1.6rem, 16.5cqi); }
+.cifra .etiqueta, .cifra .nota { overflow-wrap: anywhere; }
+.cifra-grande, .cabeza .cifra-grande { white-space: normal; overflow-wrap: anywhere; font-size: clamp(1rem, 7vw, 1.4rem); }
+.cabeza { flex-wrap: wrap; }
+/* En tarjetas, si la etiqueta y el valor no caben en una línea, el valor baja a la siguiente. */
+@media (max-width: 56.25em) {
+  .tabla td { flex-wrap: wrap; }
+  .tabla td > * { max-width: 100%; }
+  .tabla td strong, .tabla td.num, .barras .cuanto { overflow-wrap: anywhere; }
+  .barras .fila, .barras.compactas .fila { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .barras .cuanto { text-align: left; }
+  dl.datos > div, .datos div { flex-wrap: wrap; }
+}
+
+/* Rejillas que dependen del tamaño de letra: si la letra crece, pasan a menos columnas en vez de apretar el contenido. */
+.boton { height: auto; min-height: 34px; padding-top: 4px; padding-bottom: 4px; white-space: normal; text-align: center; line-height: 1.2; }
+.boton.principal { min-height: 44px; }
+.formulario .acciones { flex-wrap: wrap; }
+.acciones > .boton { max-width: 100%; }
+dl.datos dd, dl.datos dt { overflow-wrap: anywhere; }
+@media (max-width: 56.25em) {
+  .formulario .acciones > * { flex: 1 1 8rem; }
+  .cifras, .atajos { grid-template-columns: repeat(auto-fit, minmax(min(100%, 8.5rem), 1fr)); }
+  dl.datos, dl.datos.compactos { grid-template-columns: repeat(auto-fit, minmax(min(100%, 7.5rem), 1fr)); }
+  .atajo b, .atajo small { overflow-wrap: anywhere; }
+}
+.tabla td a.id { white-space: normal; overflow-wrap: anywhere; }
+.paginator { white-space: normal; }
