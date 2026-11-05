@@ -1094,3 +1094,11 @@ form.formulario > div:has(> input[type=checkbox]) input { width: 22px; height: 2
 
 /* Red de seguridad: ningún detalle puede crear desplazamiento lateral en la página. */
 html, body { overflow-x: clip; }
+
+/* Celular: la entrada de cada pantalla es un solo fundido corto. Mover muchas tarjetas mientras la página carga causaba tirones en teléfonos modestos. */
+@media (max-width: 56.25em) {
+  @view-transition { navigation: none; }
+  main > *, .cifras .cifra, .lado .cifra { animation: aparece .18s ease-out backwards; animation-delay: 0s !important; }
+  .barras .relleno, .consumo .barra span { animation: none; }
+  h1 .estado { animation: none; }
+}
