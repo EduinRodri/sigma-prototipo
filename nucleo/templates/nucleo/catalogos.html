@@ -1,0 +1,38 @@
+{% extends "nucleo/base.html" %}
+{% block titulo %}Catálogos{% endblock %}
+{% block contenido %}
+<div class="encabezado">
+  <div>
+    <h1>Catálogos</h1>
+    <p class="subtitulo">Los datos que usan los gastos. Nada se borra: lo que ya no se usa se desactiva.</p>
+  </div>
+  <a class="boton principal" href="{% url 'catalogo_nuevo' tipo %}"><svg class="icono"><use href="#i-mas"/></svg><span class="texto-fab">Agregar {{ cat.singular }}</span></a>
+</div>
+<div class="tabla">
+  <div class="barra-tabla">
+    <nav class="pestanas" aria-label="Elegir catálogo">
+      {% for p in pestanas %}<a href="{% url 'catalogo' p.tipo %}" class="{% if p.tipo == tipo %}activo{% endif %}"{% if p.tipo == tipo %} aria-current="page"{% endif %}>{{ p.titulo }}<span>{{ p.total }}</span></a>{% endfor %}
+    </nav>
+    <form method="get" role="search">
+      <span class="buscador"><svg class="icono"><use href="#i-buscar"/></svg><input type="search" name="q" value="{{ q }}" placeholder="Buscar en {{ cat.titulo|lower }}" aria-label="Buscar en {{ cat.titulo|lower }}"></span>
+      {% if q %}<a class="enlace-suave" href="{% url 'catalogo' tipo %}">Limpiar</a>{% endif %}
+    </form>
+  </div>
+  <table>
+    <thead>
+      <tr><th>{{ cat.columna }}</th>{% for c in cat.columnas %}<th>{{ c }}</th>{% endfor %}<th>Estado</th></tr>
+    </thead>
+    <tbody>
+    {% for f in filas %}
+      <tr>
+        <td><a class="id" href="{% url 'catalogo_editar' tipo f.pk %}">{{ f.titulo }}</a>{% if f.ayuda %}<span class="ayuda-celda">{{ f.ayuda|truncatechars:44 }}</span>{% endif %}</td>
+        {% for celda in f.celdas %}<td>{{ celda }}</td>{% endfor %}
+        <td><span class="estado estado-{% if f.activo %}ABIERTO{% else %}CERRADO{% endif %}">{% if f.activo %}Activo{% else %}Inactivo{% endif %}</span></td>
+      </tr>
+    {% empty %}
+      <tr><td class="vacia" colspan="{{ columnas_total }}"><svg class="vacia-ilustra"><use href="#{{ cat.icono }}"/></svg>{% if q %}<strong>Sin resultados para «{{ q }}»</strong>Prueba con otra palabra.{% else %}<strong>Todavía no hay registros</strong>Agrega el primero con el botón de arriba.{% endif %}</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

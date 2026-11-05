@@ -1,0 +1,21 @@
+{% extends "nucleo/base.html" %}
+{% block titulo %}{% if instancia %}Editar{% else %}Agregar{% endif %} {{ cat.singular }}{% endblock %}
+{% block contenido %}
+<nav class="migas"><a href="{% url 'catalogo' tipo %}">{{ cat.titulo }}</a><span>/</span><span>{% if instancia %}{{ instancia }}{% else %}Agregar{% endif %}</span></nav>
+<div class="encabezado">
+  <div>
+    <h1>{% if instancia %}Editar {{ cat.singular }}{% else %}Agregar {{ cat.singular }}{% endif %}</h1>
+    <p class="subtitulo">Si ya no se usa, desmarca «Activo»: deja de aparecer en los gastos nuevos y conserva su historial.</p>
+  </div>
+</div>
+<div class="panel formulario-catalogo">
+  <form method="post" class="formulario">
+    {% csrf_token %}
+    {{ form.as_div }}
+    <div class="acciones">
+      <button class="boton" type="submit">Guardar</button>
+      <a class="boton secundario" href="{% url 'catalogo' tipo %}">Cancelar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

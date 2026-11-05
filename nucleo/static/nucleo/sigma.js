@@ -140,13 +140,22 @@
       for (var k = 0; k < v.length; k++) if (v[k].classList.contains("activa")) return k;
       return -1;
     };
+    /* Solo se descarga la foto visible; la siguiente se pide con tiempo, antes de mostrarla. */
+    var cargar = function (d) {
+      if (d && !d.style.backgroundImage && d.dataset.foto) d.style.backgroundImage = "url('" + d.dataset.foto + "')";
+    };
     var primera = visibles();
     if (primera.length && actual() === -1) primera[0].classList.add("activa");
+    cargar(primera[Math.max(actual(), 0)]);
+    setTimeout(function () { var v = visibles(); cargar(v[(actual() + 1) % v.length]); }, 3000);
     setInterval(function () {
       var v = visibles(), k = actual();
       if (v.length < 2) return;
+      var siguiente = (k + 1) % v.length;
+      cargar(v[siguiente]);
       if (k >= 0) v[k].classList.remove("activa");
-      v[(k + 1) % v.length].classList.add("activa");
+      v[siguiente].classList.add("activa");
+      cargar(v[(siguiente + 1) % v.length]);
     }, 6000);
   }
 

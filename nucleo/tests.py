@@ -434,3 +434,55 @@ class GuiaDeDisenoTest(BaseSigma):
         self.assertEqual(r.status_code, 200)
         for esperado in ("--marca-fondo", "i-freno", "i-camara", "Una acción principal por pantalla"):
             self.assertContains(r, esperado)
+
+
+class CatalogosTest(BaseSigma):
+    """Los catálogos son pantallas de SIGMA: gestión los mantiene y nada se borra."""
+
+    def test_sin_sesion_se_va_al_ingreso(self):
+        self.assertEqual(self.client.get("/catalogos/camiones/").status_code, 302)
+
+    def test_el_tecnico_no_entra(self):
+        self.client.force_login(self.tecnico)
+        self.assertEqual(self.client.get("/catalogos/camiones/").status_code, 403)
+        self.assertEqual(self.client.post("/catalogos/categorias/nuevo/", {"nombre": "X", "activo": "on"}).status_code, 403)
+        self.assertFalse(Categoria.objects.filter(nombre="X").exists())
+
+    def test_gestion_ve_los_cuatro_catalogos(self):
+        for usuario in (self.administrativa, self.directora):
+            self.client.force_login(usuario)
+            for tipo in ("camiones", "conductores", "proveedores", "categorias"):
+                self.assertEqual(self.client.get(f"/catalogos/{tipo}/").status_code, 200)
+
+    def test_un_catalogo_que_no_existe_da_404(self):
+        self.client.force_login(self.administrativa)
+        self.assertEqual(self.client.get("/catalogos/gastos/").status_code, 404)
+
+    def test_agregar_y_buscar(self):
+        self.client.force_login(self.administrativa)
+        self.client.post("/catalogos/proveedores/nuevo/", {"nombre": "Repuestos Norte", "nit": "900", "activo": "on"})
+        self.assertTrue(Proveedor.objects.filter(nombre="Repuestos Norte", nit="900").exists())
+        respuesta = self.client.get("/catalogos/proveedores/", {"q": "norte"})
+        self.assertContains(respuesta, "Repuestos Norte")
+        self.assertNotContains(respuesta, "Taller de prueba")
+
+    def test_la_placa_queda_en_mayusculas_y_no_se_repite(self):
+        self.client.force_login(self.administrativa)
+        self.client.post("/catalogos/camiones/nuevo/", {"placa": "abc123", "tipo": "FURGON", "activo": "on"})
+        self.assertTrue(Camion.objects.filter(placa="ABC123").exists())
+        respuesta = self.client.post("/catalogos/camiones/nuevo/", {"placa": "ABC123", "tipo": "FURGON", "activo": "on"})
+        self.assertEqual(respuesta.status_code, 200)
+        self.assertEqual(Camion.objects.filter(placa="ABC123").count(), 1)
+
+    def test_desactivar_conserva_el_registro_y_lo_saca_de_los_gastos_nuevos(self):
+        self.client.force_login(self.administrativa)
+        self.client.post(f"/catalogos/categorias/{self.categoria.pk}/", {"nombre": "Frenos"})
+        self.categoria.refresh_from_db()
+        self.assertFalse(self.categoria.activo)
+        anticipo = self._anticipo()
+        self.client.force_login(self.tecnico)
+        self.assertNotContains(self.client.get(f"/anticipos/{anticipo.pk}/gastos/nuevo/"), ">Frenos<")
+
+    def test_el_menu_lleva_a_catalogos_de_sigma(self):
+        self.client.force_login(self.administrativa)
+        self.assertContains(self.client.get("/"), 'href="/catalogos/"')

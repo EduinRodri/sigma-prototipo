@@ -6,7 +6,7 @@
 <div class="ingreso">
   <header class="foto-flota">
     <div class="carrusel" aria-hidden="true">
-      {% fotos_ingreso as fotos %}{% for foto in fotos %}<div class="diapositiva {% if '-v-' in foto %}solo-celular{% else %}solo-pc{% endif %}{% if forloop.first %} activa{% endif %}" style="background-image:url('{% static foto %}')"></div>{% endfor %}
+      {% fotos_ingreso as fotos %}{% for foto in fotos %}<div class="diapositiva {% if '-v-' in foto %}solo-celular{% else %}solo-pc{% endif %}{% if forloop.first %} activa{% endif %}" data-foto="{% static foto %}"{% if forloop.first or '02-SGM101' in foto %} style="background-image:url('{% static foto %}')"{% endif %}></div>{% endfor %}
     </div>
     <span class="cliente">
       <svg class="logo-cliente" aria-hidden="true"><use href="#logo-garzas"/></svg>

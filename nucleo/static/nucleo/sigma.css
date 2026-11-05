@@ -1051,3 +1051,31 @@ main > :has(.boton.principal) { animation-name: aparece; }
   html:has(.ingreso), body:has(.ingreso) { background: var(--superficie); overscroll-behavior-y: none; }
   .ingreso { min-height: 100vh; min-height: 100dvh; }
 }
+
+/* Formularios cortos: la barra de acciones va al final, sin tapar campos mientras se escribe. */
+@media (max-width: 56.25em) {
+  .panel > form.formulario > .acciones { position: static; margin: 6px 0 0; padding: 0; background: none; }
+}
+/* Catálogos */
+.formulario-catalogo { max-width: 40rem; }
+form.formulario > div:has(> input[type=checkbox]) { display: flex; flex-direction: row-reverse; justify-content: flex-end; align-items: center; gap: 10px; min-height: 44px; }
+form.formulario > div:has(> input[type=checkbox]) input { width: 22px; height: 22px; accent-color: var(--marca); }
+.tabla td .estado { white-space: nowrap; }
+/* Cifras y rótulos: se leen enteros; con letra enorme se ajustan al ancho en vez de partirse. */
+.producto b, .menu .grupo, .lateral .grupo { white-space: nowrap; }
+.cifra .valor, .cifra-grande, dd, .barras .cuanto { overflow-wrap: normal; }
+.cifra .valor { white-space: nowrap; font-size: min(1.6rem, 11vw); }
+.cifra-grande { white-space: nowrap; font-size: min(1.4rem, 10vw); }
+.cabeza .cifra-grande { font-size: min(1.15rem, 9vw); }
+
+/* Cabecera del celular: el espacio de los íconos se reserva completo y, si no cabe el nombre, queda solo el logo. */
+@media (max-width: 56.25em) {
+  .lateral .cliente { padding-right: 212px; }
+}
+@media (max-width: 25em) {
+  .lateral .cliente > span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .lateral .cliente { padding-right: 0; }
+}
+
+/* En teléfono la foto queda quieta: el acercamiento lento gasta batería y no aporta en una franja pequeña. */
+@media (max-width: 37.5em) { .carrusel .diapositiva.activa { animation: none; } }

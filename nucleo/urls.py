@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import views
+from . import catalogos, views
 
 urlpatterns = [
     path("manifest.webmanifest", views.manifest, name="manifest"),
@@ -20,4 +20,8 @@ urlpatterns = [
     path("flota/<str:placa>/", views.vehiculo, name="vehiculo"),
     path("reportes/", views.reportes, name="reportes"),
     path("guia/", views.guia, name="guia"),
+    path("catalogos/", catalogos.inicio, name="catalogos"),
+    path("catalogos/<str:tipo>/", catalogos.lista, name="catalogo"),
+    path("catalogos/<str:tipo>/nuevo/", catalogos.nuevo, name="catalogo_nuevo"),
+    path("catalogos/<str:tipo>/<int:pk>/", catalogos.editar, name="catalogo_editar"),
 ]

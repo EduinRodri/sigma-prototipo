@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#2f6b3a">
+  <meta name="theme-color" content="#f3f2ea" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#17211b" media="(prefers-color-scheme: dark)">
   <script>try{var t=localStorage.getItem("sigma-tema");if(t)document.documentElement.dataset.tema=t}catch(e){}</script>
   <link rel="manifest" href="{% url 'manifest' %}">
   <meta name="mobile-web-app-capable" content="yes">
@@ -41,7 +41,7 @@
       <span class="grupo">Administración</span>
       <a href="{% url 'fondo' %}" class="{% if url == 'fondo' %}activo{% endif %}"><svg class="icono"><use href="#i-fondo"/></svg>Fondo de caja</a>
       <a href="{% url 'reportes' %}" class="{% if url == 'reportes' %}activo{% endif %}"><svg class="icono"><use href="#i-reporte"/></svg>Reportes</a>
-      <a href="{% url 'admin:index' %}"><svg class="icono"><use href="#i-catalogo"/></svg>Catálogos</a>
+      <a href="{% url 'catalogos' %}" class="{% if url == 'catalogo' or url == 'catalogo_nuevo' or url == 'catalogo_editar' %}activo{% endif %}"><svg class="icono"><use href="#i-catalogo"/></svg>Catálogos</a>
       </div>
       {% endif %}
     </nav>
