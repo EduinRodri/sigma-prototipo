@@ -1079,3 +1079,18 @@ form.formulario > div:has(> input[type=checkbox]) input { width: 22px; height: 2
 
 /* En teléfono la foto queda quieta: el acercamiento lento gasta batería y no aporta en una franja pequeña. */
 @media (max-width: 37.5em) { .carrusel .diapositiva.activa { animation: none; } }
+
+/* Pantalla muy baja (teléfono girado con zoom o letra máxima): las barras dejan de ser fijas y el contenido usa toda la altura. */
+@media (max-width: 58.25em) and (max-height: 20em) {
+  body { padding-bottom: 0; }
+  .lateral { position: static; }
+  .superior { position: absolute; }
+  .menu { position: static; height: auto; min-height: 44px; border-top: 0; border-bottom: 1px solid var(--borde); padding-bottom: 0; }
+  main { padding-bottom: 72px; }
+  .boton.principal { bottom: 12px; width: 48px !important; height: 48px; padding: 0; gap: 0; justify-content: center; }
+  .boton.principal .texto-fab { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .avisos { top: 8px; }
+}
+
+/* Red de seguridad: ningún detalle puede crear desplazamiento lateral en la página. */
+html, body { overflow-x: clip; }
